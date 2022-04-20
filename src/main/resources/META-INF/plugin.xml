@@ -1,14 +1,18 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.christophsturm.failgoodidea</id>
-    <name>failgood-idea</name>
+    <name>Failgood-Idea</name>
     <vendor>christophsturm</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.kotlin</depends>
+    <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.christophsturm.failgoodidea.services.MyApplicationService"/>
         <projectService serviceImplementation="com.github.christophsturm.failgoodidea.services.MyProjectService"/>
+        <testFramework implementation="com.github.christophsturm.failgoodidea.FailgoodTestFramework"/>
+        <testFinder implementation="com.github.christophsturm.failgoodidea.TestFinder"/>
     </extensions>
 
     <applicationListeners>
