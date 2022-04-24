@@ -9,14 +9,16 @@
     <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.christophsturm.failgoodidea.services.MyApplicationService"/>
+<!--        <applicationService serviceImplementation="com.github.christophsturm.failgoodidea.services.MyApplicationService"/>
         <projectService serviceImplementation="com.github.christophsturm.failgoodidea.services.MyProjectService"/>
         <testFramework implementation="com.github.christophsturm.failgoodidea.FailgoodTestFramework"/>
-        <testFinder implementation="com.github.christophsturm.failgoodidea.TestFinder"/>
+        <testFinder implementation="com.github.christophsturm.failgoodidea.TestFinder"/>-->
+        <runLineMarkerContributor language="kotlin" implementationClass="com.github.christophsturm.failgoodidea.LineMarkerContributor"/>
+
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.christophsturm.failgoodidea.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+<!--        <listener class="com.github.christophsturm.failgoodidea.listeners.MyProjectManagerListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
     </applicationListeners>
 </idea-plugin>
