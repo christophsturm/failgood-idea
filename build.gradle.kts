@@ -5,16 +5,12 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     id("com.github.ben-manes.versions") version "0.42.0"
-    // Java support
     id("java")
-    // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.6.21"
-    // Gradle IntelliJ Plugin
     id("org.jetbrains.intellij") version "1.5.3"
-    // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
-    // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
+    id("com.adarshr.test-logger") version "3.2.0"
 }
 
 group = properties("pluginGroup")
@@ -23,6 +19,10 @@ version = properties("pluginVersion")
 // Configure project's dependencies
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    testImplementation("dev.failgood:failgood:0.6.1")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
@@ -113,5 +113,11 @@ tasks {
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
         channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
+    }
+    test {
+        systemProperty("idea.home.path", "/Users/christoph/Projects/ext/intellij-community")
+        isScanForTestClasses = false
+        // Only run tests from classes that end with "Test"
+        include("**/*Test.class")
     }
 }
