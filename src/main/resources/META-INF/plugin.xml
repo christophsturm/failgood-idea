@@ -1,6 +1,6 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.christophsturm.failgoodidea</id>
+    <id>failgood.idea</id>
     <name>Failgood-Idea</name>
     <vendor>christophsturm</vendor>
 
@@ -9,16 +9,16 @@
     <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-<!--        <applicationService serviceImplementation="com.github.christophsturm.failgoodidea.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.christophsturm.failgoodidea.services.MyProjectService"/>
-        <testFramework implementation="com.github.christophsturm.failgoodidea.FailgoodTestFramework"/>
-        <testFinder implementation="com.github.christophsturm.failgoodidea.TestFinder"/>-->
-        <runLineMarkerContributor language="kotlin" implementationClass="com.github.christophsturm.failgoodidea.LineMarkerContributor"/>
+<!--        <applicationService serviceImplementation="com.github.christophsturm.idea.services.MyApplicationService"/>
+        <projectService serviceImplementation="com.github.christophsturm.idea.services.MyProjectService"/>
+        <testFramework implementation="com.github.christophsturm.idea.FailgoodTestFramework"/>
+        <testFinder implementation="com.github.christophsturm.idea.TestFinder"/>-->
+        <runLineMarkerContributor language="kotlin" implementationClass="failgood.idea.LineMarkerContributor"/>
 
     </extensions>
 
     <applicationListeners>
-<!--        <listener class="com.github.christophsturm.failgoodidea.listeners.MyProjectManagerListener"
+<!--        <listener class="com.github.christophsturm.idea.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
     </applicationListeners>
 </idea-plugin>

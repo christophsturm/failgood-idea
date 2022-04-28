@@ -1,4 +1,4 @@
-package com.github.christophsturm.failgoodidea
+package failgood.idea
 
 import java.awt.Component
 import java.awt.Graphics

@@ -1,7 +1,7 @@
-package com.github.christophsturm.failgoodidea.services
+package failgood.idea.services
 
 import com.intellij.openapi.project.Project
-import com.github.christophsturm.failgoodidea.MyBundle
+import failgood.idea.MyBundle
 
 class MyProjectService(project: Project) {
 

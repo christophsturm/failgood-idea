@@ -1,16 +1,14 @@
-package com.github.christophsturm.failgoodidea
+package failgood.idea
 
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.roots.ContentEntry
 import com.intellij.openapi.roots.ModifiableRootModel
 import com.intellij.pom.java.LanguageLevel
-import com.intellij.testFramework.TestDataPath
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
 import com.intellij.testFramework.fixtures.MavenDependencyUtil
 import com.intellij.util.PsiErrorElementUtil
 import org.jetbrains.kotlin.psi.KtFile
 
-@TestDataPath("\$CONTENT_ROOT/src/test/testData")
 class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
     private val projectDescriptor = object : ProjectDescriptor(LanguageLevel.HIGHEST) {
         override fun configureModule(module: Module, model: ModifiableRootModel, contentEntry: ContentEntry) {
@@ -21,7 +19,7 @@ class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
                 .classesRoot(testDataPath)
                 .externalAnnotationsRoot("$testDataPath/since-2.0")
                 .addTo(model)*/
-            MavenDependencyUtil.addFromMaven(model, "dev.failgood:failgood:0.6.1")
+            MavenDependencyUtil.addFromMaven(model, "d.failgood:failgood:0.6.1")
         }
     }
 

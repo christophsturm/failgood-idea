@@ -1,4 +1,4 @@
-package com.github.christophsturm.failgoodidea
+package failgood.idea
 
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor
 import com.intellij.lang.Language
