@@ -7,7 +7,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.42.0"
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.6.21"
-    id("org.jetbrains.intellij") version "1.5.2"
+    id("org.jetbrains.intellij") version "1.6.0"
     id("org.jetbrains.changelog") version "1.3.1"
     id("org.jetbrains.qodana") version "0.1.13"
     id("com.adarshr.test-logger") version "3.2.0"
@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("dev.failgood:failgood:0.6.1")
+    testImplementation("dev.failgood:failgood:0.7.1")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin

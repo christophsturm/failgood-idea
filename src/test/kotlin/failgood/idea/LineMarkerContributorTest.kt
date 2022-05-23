@@ -19,7 +19,7 @@ class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
                 .classesRoot(testDataPath)
                 .externalAnnotationsRoot("$testDataPath/since-2.0")
                 .addTo(model)*/
-            MavenDependencyUtil.addFromMaven(model, "d.failgood:failgood:0.6.1")
+            MavenDependencyUtil.addFromMaven(model, "dev.failgood:failgood:0.7.1")
         }
     }
 
