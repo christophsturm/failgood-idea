@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("dev.failgood:failgood:0.7.1")
+    testImplementation("dev.failgood:failgood:0.8.1")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
