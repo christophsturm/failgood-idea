@@ -5,7 +5,6 @@ import com.intellij.openapi.roots.ContentEntry
 import com.intellij.openapi.roots.ModifiableRootModel
 import com.intellij.pom.java.LanguageLevel
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
-import com.intellij.testFramework.fixtures.MavenDependencyUtil
 import com.intellij.util.PsiErrorElementUtil
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -19,7 +18,7 @@ class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
                 .classesRoot(testDataPath)
                 .externalAnnotationsRoot("$testDataPath/since-2.0")
                 .addTo(model)*/
-            MavenDependencyUtil.addFromMaven(model, "dev.failgood:failgood:0.7.1")
+//            MavenDependencyUtil.addFromMaven(model, "dev.failgood:failgood:0.8.1")
         }
     }
 
@@ -27,7 +26,7 @@ class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
         return projectDescriptor
     }
 
-    fun testContributeRunInfo() {
+    fun testCntributeRunInfo() {
         val psiFile = myFixture.configureByFile("FailgoodTests.kt")
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
