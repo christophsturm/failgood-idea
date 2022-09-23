@@ -13,14 +13,12 @@ class FailgoodLineMarkerContributorTest {
         it("works") {
             val factory = IdeaTestFixtureFactory.getFixtureFactory()
             val fixtureBuilder = factory.createLightFixtureBuilder(
-                DefaultLightProjectDescriptor(),
-                "FailgoodLineMarkerContributor"
+                DefaultLightProjectDescriptor()
             )
             val fixture = fixtureBuilder.fixture
             val myFixture = JavaTestFixtureFactory.getFixtureFactory()
                 .createCodeInsightFixture(fixture, LightTempDirTestFixtureImpl(true))
             myFixture.setUp()
-
         }
     }
 }

@@ -33,7 +33,6 @@ class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
         val info = LineMarkerContributor().getInfo(psiFile.findElementAt(myFixture.caretOffset)!!)
         println(info)
-
     }
 
     override fun getTestDataPath() = "src/test/testData/"

@@ -18,9 +18,10 @@ class LineMarkerContributor : RunLineMarkerContributor() {
         val modifierList: KtModifierList? = root.modifierList
         val annotation = modifierList?.annotations
         val annotationEntries = modifierList?.annotationEntries
-        val isTest = (annotationEntries?.any {it.shortName?.asString() == "Test"}) == true
-        if (!isTest)
+        val isTest = (annotationEntries?.any { it.shortName?.asString() == "Test" }) == true
+        if (!isTest) {
             return null
+        }
         isClassOrObject(e)
         isTestOrContext(e)
         return null
@@ -31,13 +32,12 @@ class LineMarkerContributor : RunLineMarkerContributor() {
         if (declaration.nameIdentifier != e) return null
         if (declaration !is KtClassOrObject) return null
 
-        log.warn("found declaration:"+ declaration.name)
+        log.warn("found declaration:" + declaration.name)
         return null
     }
     private fun isTestOrContext(e: PsiElement): PsiElement? {
         val declaration = e.getStrictParentOfType<KtCallElement>()
         if (declaration is KtCallElement) {
-
             val calleeExpression = declaration.calleeExpression as KtNameReferenceExpression
             val name = calleeExpression.getReferencedName()
             if (name == "it" || name == "test") {
@@ -45,7 +45,7 @@ class LineMarkerContributor : RunLineMarkerContributor() {
                 log.warn(testName.toString())
             }
         }
-            log.warn("call: ${e}")
+        log.warn("call: $e")
         return null
     }
 }
