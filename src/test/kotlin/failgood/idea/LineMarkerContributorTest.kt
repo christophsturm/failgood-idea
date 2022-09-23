@@ -7,6 +7,7 @@ import com.intellij.pom.java.LanguageLevel
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
 import com.intellij.util.PsiErrorElementUtil
 import org.jetbrains.kotlin.psi.KtFile
+import java.io.File
 
 class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
     private val projectDescriptor = object : ProjectDescriptor(LanguageLevel.HIGHEST) {
@@ -26,13 +27,13 @@ class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
         return projectDescriptor
     }
 
-    fun testCntributeRunInfo() {
-        val psiFile = myFixture.configureByFile("FailgoodTests.kt")
+    fun testContributeRunInfo() {
+        val psiFile = myFixture.configureByFile("FailGoodTests.kt")
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
         val info = LineMarkerContributor().getInfo(psiFile.findElementAt(myFixture.caretOffset)!!)
         println(info)
     }
 
-    override fun getTestDataPath() = "src/test/testData/"
+    override fun getTestDataPath(): String = File("src/test/testData/").absolutePath
 }
