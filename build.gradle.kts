@@ -3,7 +3,7 @@ import org.jetbrains.changelog.markdownToHTML
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.43.0"
+    id("com.github.ben-manes.versions") version "0.44.0"
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.7.21"
     id("org.jetbrains.intellij") version "1.10.0"
