@@ -30,7 +30,7 @@ kotlin {
 }
 
 dependencies {
-    testImplementation("dev.failgood:failgood:0.8.2")
+    testImplementation("dev.failgood:failgood:0.8.3")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
