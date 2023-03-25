@@ -11,11 +11,14 @@ import org.jetbrains.kotlin.idea.KotlinLanguage
 import javax.swing.Icon
 
 class FailgoodTestFramework : TestFramework {
+    companion object {
+        val icon = EmptyIcon(0, 0)
+
+    }
     override fun getName(): String = "Failgood"
 
-    private val emptyIcon = EmptyIcon(0, 0)
     override fun getIcon(): Icon {
-        return emptyIcon
+        return FailgoodTestFramework.icon
     }
 
     override fun isLibraryAttached(module: Module): Boolean {
