@@ -46,8 +46,10 @@ class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
 
     override fun getTestDataPath(): String = File("src/test/testData/").absolutePath
     fun addFromMaven(
-        model: ModifiableRootModel, mavenCoordinates: String,
-        includeTransitiveDependencies: Boolean, dependencyScope: DependencyScope?
+        model: ModifiableRootModel,
+        mavenCoordinates: String,
+        includeTransitiveDependencies: Boolean,
+        dependencyScope: DependencyScope?
     ) {
         val remoteRepositoryDescriptions = RemoteRepositoryDescription.DEFAULT_REPOSITORIES
         val libraryProperties = RepositoryLibraryProperties(mavenCoordinates, includeTransitiveDependencies)

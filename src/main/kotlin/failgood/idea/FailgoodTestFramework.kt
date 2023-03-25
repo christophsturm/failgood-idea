@@ -13,7 +13,6 @@ import javax.swing.Icon
 class FailgoodTestFramework : TestFramework {
     companion object {
         val icon = EmptyIcon(0, 0)
-
     }
     override fun getName(): String = "Failgood"
 

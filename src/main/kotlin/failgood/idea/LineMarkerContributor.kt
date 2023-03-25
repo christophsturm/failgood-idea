@@ -17,14 +17,14 @@ class LineMarkerContributor : RunLineMarkerContributor() {
     override fun getInfo(e: PsiElement): Info? {
         val root = e.getStrictParentOfType<KtClassOrObject>() ?: return null
         val modifierList: KtModifierList? = root.modifierList
-        val annotation = modifierList?.annotations
+        modifierList?.annotations
         val annotationEntries = modifierList?.annotationEntries
         val isTest = (annotationEntries?.any { it.shortName?.asString() == "Test" }) == true
         if (!isTest) {
             return null
         }
         isTestOrContext(e)
-        return Info(FailgoodTestFramework.icon, {"run test"} )
+        return Info(FailgoodTestFramework.icon, { "run test" })
     }
 
     private fun isTestOrContext(e: PsiElement): PsiElement? {
