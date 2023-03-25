@@ -27,7 +27,7 @@ repositories {
 
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -65,6 +65,9 @@ kover.xmlReport {
 
 
 tasks {
+    buildSearchableOptions {
+        enabled = false
+    }
     wrapper {
         gradleVersion = properties("gradleVersion")
     }
@@ -79,7 +82,7 @@ tasks {
             val start = "<!-- Plugin description -->"
             val end = "<!-- Plugin description end -->"
 
-            with (it.lines()) {
+            with(it.lines()) {
                 if (!containsAll(listOf(start, end))) {
                     throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
                 }
@@ -89,20 +92,20 @@ tasks {
 
         val changelog = project.changelog // local variable for configuration cache compatibility
         // Get the latest available change notes from the changelog file
-/*        changeNotes.set(properties("pluginVersion").map { pluginVersion ->
-            with(changelog) {
-                renderItem(
-                    (getOrNull(pluginVersion) ?: getUnreleased())
-                        .withHeader(false)
-                        .withEmptySections(false),
-                    Changelog.OutputType.HTML,
-                )
-            }
-        })*/
+        /*        changeNotes.set(properties("pluginVersion").map { pluginVersion ->
+                    with(changelog) {
+                        renderItem(
+                            (getOrNull(pluginVersion) ?: getUnreleased())
+                                .withHeader(false)
+                                .withEmptySections(false),
+                            Changelog.OutputType.HTML,
+                        )
+                    }
+                })*/
     }
 
-    // Configure UI tests plugin
-    // Read more: https://github.com/JetBrains/intellij-ui-test-robot
+// Configure UI tests plugin
+// Read more: https://github.com/JetBrains/intellij-ui-test-robot
     runIdeForUiTests {
         systemProperty("robot-server.port", "8082")
         systemProperty("ide.mac.message.dialogs.as.sheets", "false")
@@ -142,7 +145,7 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     rejectVersionIf {
         isNonStable(candidate.version) && !isNonStable(currentVersion)
     }
-    // optional parameters
+// optional parameters
     gradleReleaseChannel = "current"
     checkForGradleUpdate = true
     outputFormatter = "json"
