@@ -8,7 +8,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.46.0"
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.8.21"
-    id("org.jetbrains.intellij") version "1.14.1"
+    id("org.jetbrains.intellij") version "1.15.0"
     id("org.jetbrains.changelog") version "2.1.2"
     id("org.jetbrains.qodana") version "0.1.13"
     id("com.adarshr.test-logger") version "3.2.0"
