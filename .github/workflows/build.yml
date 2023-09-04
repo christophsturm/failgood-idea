@@ -114,7 +114,7 @@ jobs:
 
       # Run Qodana inspections
       - name: Qodana - Code Inspection
-        uses: JetBrains/qodana-action@v2023.1.0
+        uses: JetBrains/qodana-action@32c3156f63f31a54dece4ce3e32dbb767c38bb61 # v2023.2.6
 
       # Prepare plugin archive content for creating artifact
       - name: Prepare Plugin Artifact
