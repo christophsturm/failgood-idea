@@ -5,7 +5,7 @@ import java.util.Locale
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.46.0"
+    id("com.github.ben-manes.versions") version "0.49.0"
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.9.10"
     id("org.jetbrains.intellij") version "1.15.0"
