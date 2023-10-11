@@ -11,7 +11,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.15.0"
     id("org.jetbrains.changelog") version "2.1.2"
     id("org.jetbrains.qodana") version "0.1.13"
-    id("com.adarshr.test-logger") version "3.2.0"
+    id("com.adarshr.test-logger") version "4.0.0"
     id("org.jmailen.kotlinter") version "3.14.0"
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
 
