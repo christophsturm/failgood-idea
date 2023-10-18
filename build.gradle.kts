@@ -14,7 +14,7 @@ plugins {
     alias(libs.plugins.kover) // Gradle Kover Plugin
 
     id("com.adarshr.test-logger") version "4.0.0"
-    id("org.jmailen.kotlinter") version "3.14.0"
+    id("org.jmailen.kotlinter") version "3.16.0"
 
 }
 
