@@ -5,13 +5,13 @@ import java.util.Locale
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.46.0"
+    id("com.github.ben-manes.versions") version "0.49.0"
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.9.10"
-    id("org.jetbrains.intellij") version "1.15.0"
+    id("org.jetbrains.intellij") version "1.16.0"
     id("org.jetbrains.changelog") version "2.1.2"
     id("org.jetbrains.qodana") version "0.1.13"
-    id("com.adarshr.test-logger") version "3.2.0"
+    id("com.adarshr.test-logger") version "4.0.0"
     id("org.jmailen.kotlinter") version "3.14.0"
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
 
