@@ -7,13 +7,14 @@ fun properties(key: String) = project.findProperty(key).toString()
 plugins {
     id("com.github.ben-manes.versions") version "0.49.0"
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.9.10"
-    id("org.jetbrains.intellij") version "1.16.0"
-    id("org.jetbrains.changelog") version "2.1.2"
-    id("org.jetbrains.qodana") version "0.1.13"
+    alias(libs.plugins.kotlin) // Kotlin support
+    alias(libs.plugins.gradleIntelliJPlugin) // Gradle IntelliJ Plugin
+    alias(libs.plugins.changelog) // Gradle Changelog Plugin
+    alias(libs.plugins.qodana) // Gradle Qodana Plugin
+    alias(libs.plugins.kover) // Gradle Kover Plugin
+
     id("com.adarshr.test-logger") version "4.0.0"
     id("org.jmailen.kotlinter") version "3.14.0"
-    id("org.jetbrains.kotlinx.kover") version "0.6.1"
 
 }
 
@@ -25,7 +26,6 @@ repositories {
     mavenCentral()
 }
 
-// Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
 @Suppress("UnstableApiUsage")
 kotlin {
     jvmToolchain {
@@ -36,6 +36,9 @@ kotlin {
 }
 
 dependencies {
+    testRuntimeOnly(libs.junitJupiterEngine)
+    testRuntimeOnly(libs.junitVintageEngine)
+    testImplementation(libs.junitVintageEngine)
     testImplementation("dev.failgood:failgood:0.8.3")
 }
 
@@ -63,9 +66,12 @@ qodana {
     showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
 }
 
-// Configure Gradle Kover Plugin - read more: https://github.com/Kotlin/kotlinx-kover#configuration
-kover.xmlReport {
-    onCheck.set(true)
+koverReport {
+    defaults {
+        xml {
+            onCheck = true
+        }
+    }
 }
 
 
@@ -132,11 +138,11 @@ tasks {
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
         channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
     }
-    /*
     test {
-        systemProperty("idea.home.path", "/Users/christoph/Projects/ext/intellij-community")
-        systemProperty("idea.force.use.core.classloader", "true")
-    }*/
+        useJUnitPlatform()
+//        systemProperty("idea.home.path", "/Users/christoph/Projects/ext/intellij-community")
+//        systemProperty("idea.force.use.core.classloader", "true")
+    }
 }
 
 
