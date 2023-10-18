@@ -14,20 +14,19 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 
 val CI = System.getenv("CI") != null
+
 class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
     private val projectDescriptor = object : ProjectDescriptor(LanguageLevel.HIGHEST) {
         override fun configureModule(module: Module, model: ModifiableRootModel, contentEntry: ContentEntry) {
             super.configureModule(module, model, contentEntry)
-/*
-            PsiTestUtil.addProjectLibrary(model, "annotations", listOf(PathUtil.getJarPathForClass(ApiStatus.OverrideOnly::class.java)))
-            PsiTestUtil.newLibrary("library")
-                .classesRoot(testDataPath)
-                .externalAnnotationsRoot("$testDataPath/since-2.0")
-                .addTo(model)*/
+            /*
+                        PsiTestUtil.addProjectLibrary(model, "annotations", listOf(PathUtil.getJarPathForClass(ApiStatus.OverrideOnly::class.java)))
+                        PsiTestUtil.newLibrary("library")
+                            .classesRoot(testDataPath)
+                            .externalAnnotationsRoot("$testDataPath/since-2.0")
+                            .addTo(model)*/
 
-            if (!CI) {
-                addFromMaven(model, "dev.failgood:failgood:0.8.3", false, DependencyScope.COMPILE)
-            }
+            addFromMaven(model, "dev.failgood:failgood:0.8.3", false, DependencyScope.COMPILE)
         }
     }
 
