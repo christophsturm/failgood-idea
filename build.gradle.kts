@@ -13,7 +13,7 @@ plugins {
     id("org.jetbrains.qodana") version "0.1.13"
     id("com.adarshr.test-logger") version "4.0.0"
     id("org.jmailen.kotlinter") version "3.14.0"
-    id("org.jetbrains.kotlinx.kover") version "0.6.1"
+    id("org.jetbrains.kotlinx.kover") version "0.7.4"
 
 }
 
