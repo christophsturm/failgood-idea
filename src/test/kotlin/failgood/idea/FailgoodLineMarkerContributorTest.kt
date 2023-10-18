@@ -6,7 +6,7 @@ import com.intellij.testFramework.fixtures.JavaTestFixtureFactory
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl
 import failgood.describe
 
-//@Test
+// @Test
 class FailgoodLineMarkerContributorTest {
     val context = describe("testing the failgood plugin with failgood") {
         it("works") {
