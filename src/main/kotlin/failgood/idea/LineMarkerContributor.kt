@@ -2,10 +2,12 @@ package failgood.idea
 
 import com.intellij.execution.lineMarker.RunLineMarkerContributor
 import com.intellij.openapi.diagnostic.logger
+import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.idea.references.KtSimpleNameReference
+import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtModifierList
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.ValueArgument
@@ -15,33 +17,73 @@ private val log = logger<LineMarkerContributor>()
 
 class LineMarkerContributor : RunLineMarkerContributor() {
     override fun getInfo(e: PsiElement): Info? {
-        val root = e.getStrictParentOfType<KtClassOrObject>() ?: return null
-        val modifierList: KtModifierList? = root.modifierList
-        modifierList?.annotations
-        val annotationEntries = modifierList?.annotationEntries
-        val isTest = (annotationEntries?.any { it.shortName?.asString() == "Test" }) == true
-        if (!isTest) {
+        val containingClass = e.getStrictParentOfType<KtClassOrObject>() ?: return null
+        if (!containingClass.isTestClass()) {
             return null
         }
-        isTestOrContext(e)
-        return Info(FailgoodTestFramework.icon, { "run test" })
+        val className = containingClass.getQualifiedName()
+        val path = getPathToTest(e)
+        //[engine:failgood]/[class:SingleTestExecutor(failgood.internal.SingleTestExecutorTest)]/[class:test execution]/[method:executes a single test]
+        return path?.let {Info(FailgoodTestFramework.icon, { "run test" })}
     }
 
-    private fun isTestOrContext(e: PsiElement): PsiElement? {
+    /**
+     * checks if a class is a failgood test class (has a @Test Annotation)
+     */
+
+    private fun getPathToTest(e: PsiElement): List<@NlsSafe String>? {
         val declaration = e.getStrictParentOfType<KtCallElement>()
         if (declaration is KtCallElement) {
-            val calleeExpression = declaration.calleeExpression as KtNameReferenceExpression
-            val name = calleeExpression.getReferencedName()
-            if (name == "it" || name == "test") {
-                val testName: ValueArgument = declaration.valueArguments.first()
-                val argumentExpression = testName.getArgumentExpression()
-                val references = argumentExpression?.references
-                val psiReference = references?.find { it is KtSimpleNameReference }
-                println(psiReference?.resolve())
-//                println(testName.toString())
+            val calleeExpression = declaration.calleeExpression as? KtNameReferenceExpression ?: return null
+            val calleeName = calleeExpression.getReferencedName()
+            if (calleeName == "it" || calleeName == "test") {
+                val testName = getFirstParameter(declaration)
+                val parent = declaration.getStrictParentOfType<KtCallElement>()
+                val contextName = getFirstParameter(parent!!)
+                if (contextName == null || testName == null)
+                    return null
+                return listOf(contextName, testName)
             }
         }
-        log.warn("call: $e")
         return null
     }
+
+    private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? {
+        val firstArgument: ValueArgument = declaration.valueArguments.first()
+        val argumentExpression = firstArgument.getArgumentExpression()
+        val references = argumentExpression?.references
+        val singleReference = references?.singleOrNull()
+        val testName = singleReference?.canonicalText
+        return testName
+    }
+
+}
+private fun KtClassOrObject.isTestClass(): Boolean {
+    val modifierList: KtModifierList? = modifierList
+    val annotationEntries = modifierList?.annotationEntries
+    val isTestClass = (annotationEntries?.any { it.shortName?.asString() == "Test" }) == true
+    return isTestClass
+}
+// protected method copied from KtClassOrObject.kt
+fun KtClassOrObject.getQualifiedName(): String? {
+    val stub = stub
+    if (stub != null) {
+        val fqName = stub.getFqName()
+        return fqName?.asString()
+    }
+
+    val parts = mutableListOf<String>()
+    var current: KtClassOrObject? = this
+    while (current != null) {
+        val name = current.name ?: return null
+        parts.add(name)
+        current = PsiTreeUtil.getParentOfType(current, KtClassOrObject::class.java)
+    }
+    val file = containingFile as? KtFile ?: return null
+    val fileQualifiedName = file.packageFqName.asString()
+    if (!fileQualifiedName.isEmpty()) {
+        parts.add(fileQualifiedName)
+    }
+    parts.reverse()
+    return parts.joinToString(separator = ".")
 }

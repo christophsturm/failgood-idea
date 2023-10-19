@@ -39,6 +39,7 @@ dependencies {
     testRuntimeOnly(libs.junitJupiterEngine)
     testRuntimeOnly(libs.junitVintageEngine)
     testImplementation(libs.junitVintageEngine)
+    compileOnly("org.jetbrains.kotlin:kotlin-compiler:1.9.20-RC")
     testImplementation("dev.failgood:failgood:0.8.3")
 }
 

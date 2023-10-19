@@ -3,9 +3,7 @@ package failgood.idea
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor
 import com.intellij.lang.Language
 import com.intellij.openapi.module.Module
-import com.intellij.psi.JavaPsiFacade
 import com.intellij.psi.PsiElement
-import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.testIntegration.TestFramework
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import javax.swing.Icon
@@ -21,8 +19,9 @@ class FailgoodTestFramework : TestFramework {
     }
 
     override fun isLibraryAttached(module: Module): Boolean {
-        val scope = GlobalSearchScope.allScope(module.project)
-        return JavaPsiFacade.getInstance(module.project).findClass("failgood.Test", scope) != null
+        return true;
+        /*        val scope = GlobalSearchScope.allScope(module.project)
+        return JavaPsiFacade.getInstance(module.project).findClass("failgood.Test", scope) != null*/
     }
 
     override fun getLibraryPath(): String? = null
