@@ -36,10 +36,11 @@ kotlin {
 }
 
 dependencies {
+    implementation(enforcedPlatform("org.jetbrains.kotlin:kotlin-bom:1.9.10"))
     testRuntimeOnly(libs.junitJupiterEngine)
     testRuntimeOnly(libs.junitVintageEngine)
     testImplementation(libs.junitVintageEngine)
-    compileOnly("org.jetbrains.kotlin:kotlin-compiler:1.9.20-RC")
+//    compileOnly("org.jetbrains.kotlin:kotlin-compiler:1.9.10")
     testImplementation("dev.failgood:failgood:0.8.3")
 }
 
