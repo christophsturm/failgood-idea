@@ -1,6 +1,8 @@
 package failgood.idea
 
+import com.intellij.execution.lineMarker.ExecutorAction
 import com.intellij.execution.lineMarker.RunLineMarkerContributor
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
@@ -8,9 +10,11 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtModifierList
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.ValueArgument
+import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 private val log = logger<RunTestLineMarkerContributor>()
@@ -29,7 +33,7 @@ class RunTestLineMarkerContributor : RunLineMarkerContributor() {
 
         val uniqueId="[engine:failgood]/[class:${path.first()}($className)]:/[class:${path[1]}]"
         //[engine:failgood]/[class:SingleTestExecutor(failgood.internal.SingleTestExecutorTest)]/[class:test execution]/[method:executes a single test]
-        return Info(FailgoodTestFramework.icon, { "run test $path"  })
+        return Info(AllIcons.RunConfigurations.TestState.Run, { "run test $path"  }, *ExecutorAction.getActions())
     }
 
 
@@ -39,11 +43,9 @@ class RunTestLineMarkerContributor : RunLineMarkerContributor() {
             val calleeExpression = declaration.calleeExpression as? KtNameReferenceExpression ?: return null
             val calleeName = calleeExpression.getReferencedName()
             if (calleeName == "it" || calleeName == "test") {
-                val testName = getFirstParameter(declaration)
+                val testName = getFirstParameter(declaration) ?: return null
                 val parent = declaration.getStrictParentOfType<KtCallElement>()
-                val contextName = getFirstParameter(parent!!)
-                if (contextName == null || testName == null)
-                    return null
+                val contextName = getFirstParameter(parent!!) ?: return null
                 return listOf(contextName, testName)
             }
         }
@@ -51,23 +53,19 @@ class RunTestLineMarkerContributor : RunLineMarkerContributor() {
     }
 
     private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? {
-        val firstArgument: ValueArgument = declaration.valueArguments.first()
-        val argumentExpression = firstArgument.getArgumentExpression()
-        val references = argumentExpression?.references
-        val singleReference = references?.singleOrNull()
-        val testName = singleReference?.canonicalText
-        return testName
+        val ste = declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull() ?: return null
+        val ste2 = ste as? KtStringTemplateExpression ?: return null
+        return ste2.entries.joinToString("") { it.text.replace("\\\"", "\"") }
     }
 
 }
+
 /**
  * checks if a class is a failgood test class (has a @Test Annotation)
  */
 private fun KtClassOrObject.isTestClass(): Boolean {
-    val modifierList: KtModifierList? = modifierList
-    val annotationEntries = modifierList?.annotationEntries
-    val isTestClass = (annotationEntries?.any { it.shortName?.asString() == "Test" }) == true
-    return isTestClass
+    val annotationEntries = this.modifierList?.annotationEntries
+    return (annotationEntries?.any { it.shortName?.asString() == "Test" }) == true
 }
 // protected method copied from KtClassOrObject.kt
 fun KtClassOrObject.getQualifiedName(): String? {
