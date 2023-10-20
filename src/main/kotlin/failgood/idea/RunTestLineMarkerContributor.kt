@@ -13,23 +13,25 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.ValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
-private val log = logger<LineMarkerContributor>()
+private val log = logger<RunTestLineMarkerContributor>()
 
-class LineMarkerContributor : RunLineMarkerContributor() {
+class RunTestLineMarkerContributor : RunLineMarkerContributor() {
     override fun getInfo(e: PsiElement): Info? {
+        if (e.firstChild != null)
+            return null // "line markers should only be added to leaf elements"
+
         val containingClass = e.getStrictParentOfType<KtClassOrObject>() ?: return null
         if (!containingClass.isTestClass()) {
             return null
         }
         val className = containingClass.getQualifiedName()
-        val path = getPathToTest(e)
+        val path = getPathToTest(e) ?: return null
+
+        val uniqueId="[engine:failgood]/[class:${path.first()}($className)]:/[class:${path[1]}]"
         //[engine:failgood]/[class:SingleTestExecutor(failgood.internal.SingleTestExecutorTest)]/[class:test execution]/[method:executes a single test]
-        return path?.let {Info(FailgoodTestFramework.icon, { "run test" })}
+        return Info(FailgoodTestFramework.icon, { "run test $path"  })
     }
 
-    /**
-     * checks if a class is a failgood test class (has a @Test Annotation)
-     */
 
     private fun getPathToTest(e: PsiElement): List<@NlsSafe String>? {
         val declaration = e.getStrictParentOfType<KtCallElement>()
@@ -58,6 +60,9 @@ class LineMarkerContributor : RunLineMarkerContributor() {
     }
 
 }
+/**
+ * checks if a class is a failgood test class (has a @Test Annotation)
+ */
 private fun KtClassOrObject.isTestClass(): Boolean {
     val modifierList: KtModifierList? = modifierList
     val annotationEntries = modifierList?.annotationEntries
@@ -81,7 +86,7 @@ fun KtClassOrObject.getQualifiedName(): String? {
     }
     val file = containingFile as? KtFile ?: return null
     val fileQualifiedName = file.packageFqName.asString()
-    if (!fileQualifiedName.isEmpty()) {
+    if (fileQualifiedName.isNotEmpty()) {
         parts.add(fileQualifiedName)
     }
     parts.reverse()

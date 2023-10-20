@@ -13,7 +13,7 @@
         <projectService serviceImplementation="com.github.christophsturm.idea.services.MyProjectService"/>
         <testFramework implementation="com.github.christophsturm.idea.FailgoodTestFramework"/>
         <testFinder implementation="com.github.christophsturm.idea.TestFinder"/>-->
-        <runLineMarkerContributor language="kotlin" implementationClass="failgood.idea.LineMarkerContributor"/>
+        <runLineMarkerContributor language="kotlin" implementationClass="failgood.idea.RunTestLineMarkerContributor"/>
 
     </extensions>
 

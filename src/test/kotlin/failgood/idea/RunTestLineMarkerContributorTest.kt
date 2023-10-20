@@ -15,7 +15,7 @@ import java.io.File
 
 val CI = System.getenv("CI") != null
 
-class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
+class RunTestLineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
     private val projectDescriptor = object : ProjectDescriptor(LanguageLevel.HIGHEST) {
         override fun configureModule(module: Module, model: ModifiableRootModel, contentEntry: ContentEntry) {
             super.configureModule(module, model, contentEntry)
@@ -39,7 +39,7 @@ class LineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
         val findElementAt = psiFile.findElementAt(myFixture.caretOffset)
-        val info = LineMarkerContributor().getInfo(findElementAt!!)
+        val info = RunTestLineMarkerContributor().getInfo(findElementAt!!)
         assert(info != null)
     }
 
