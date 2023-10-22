@@ -165,3 +165,7 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     outputDir = "build/dependencyUpdates"
     reportfileName = "report"
 }
+tasks.getByName("classpathIndexCleanup") {
+    dependsOn(tasks.getByName("compileTestKotlin"))
+    dependsOn(tasks.getByName("compileKotlin"))
+}
