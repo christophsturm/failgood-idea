@@ -15,7 +15,7 @@ plugins {
 
     id("com.adarshr.test-logger") version "4.0.0"
     id("org.jmailen.kotlinter") version "3.14.0"
-
+    id("com.bnorm.power.kotlin-power-assert") version "0.13.0"
 }
 
 group = properties("pluginGroup")
