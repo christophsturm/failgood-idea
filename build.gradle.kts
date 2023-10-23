@@ -14,9 +14,11 @@ plugins {
     alias(libs.plugins.kover) // Gradle Kover Plugin
 
     id("com.adarshr.test-logger") version "4.0.0"
-    id("org.jmailen.kotlinter") version "3.14.0"
     id("com.bnorm.power.kotlin-power-assert") version "0.13.0"
+    alias(libs.plugins.spotless)
 }
+
+spotless { kotlin { ktfmt("0.46").kotlinlangStyle() } }
 
 group = properties("pluginGroup")
 version = properties("pluginVersion")
@@ -103,7 +105,7 @@ tasks {
             }
         })
 
-        val changelog = project.changelog // local variable for configuration cache compatibility
+//        val changelog = project.changelog // local variable for configuration cache compatibility
         // Get the latest available change notes from the changelog file
         /*        changeNotes.set(properties("pluginVersion").map { pluginVersion ->
                     with(changelog) {
