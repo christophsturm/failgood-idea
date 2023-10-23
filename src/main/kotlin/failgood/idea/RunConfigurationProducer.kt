@@ -20,7 +20,7 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         context: ConfigurationContext,
         sourceElement: Ref<PsiElement>
     ): Boolean {
-        val uniqueId = UniqueIdProducer.getUniqueId(sourceElement.get()) ?: return false
+        val uniqueId = UniqueIdProducer.computeUniqueId(sourceElement.get()) ?: return false
         val data = configuration.persistentData
         data.setUniqueIds(uniqueId)
         data.TEST_OBJECT = JUnitConfiguration.TEST_UNIQUE_ID
@@ -35,7 +35,7 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
     ): Boolean {
         // we only care about uniqueid run configs
         if (configuration.testType != JUnitConfiguration.TEST_UNIQUE_ID) return false
-        val uniqueId = context.psiLocation?.let { UniqueIdProducer.getUniqueId(it) }
+        val uniqueId = context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) }
         val b = uniqueId != null && configuration.persistentData.uniqueIds.single() == uniqueId
         if (b) log.warn("returning true, whooohoo")
         return b

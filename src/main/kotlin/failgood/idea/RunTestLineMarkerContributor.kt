@@ -10,7 +10,7 @@ private val log = logger<RunTestLineMarkerContributor>()
 
 class RunTestLineMarkerContributor : RunLineMarkerContributor() {
     override fun getInfo(e: PsiElement): Info? {
-        val uniqueId = UniqueIdProducer.getUniqueId(e) ?: return null
+        val uniqueId = UniqueIdProducer.computeUniqueId(e) ?: return null
 
         // [engine:failgood]/[class:SingleTestExecutor(failgood.internal.SingleTestExecutorTest)]/[class:test execution]/[method:executes a single test]
         return Info(

@@ -11,17 +11,10 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 object UniqueIdProducer {
-    fun getUniqueId(e: PsiElement): String? {
+    fun computeUniqueId(e: PsiElement): String? {
         if (e.firstChild != null)
             return null // "line markers should only be added to leaf elements"
-
-        val callElement =
-            if (e is KtCallElement) e
-            else
-                e.parent.let {
-                    if (it is KtCallElement) it
-                    else it.parent.let { if (it is KtCallElement) it else return null }
-                }
+        val callElement = e.getKtCallElement() ?: return null
 
         val containingClass = callElement.getStrictParentOfType<KtClassOrObject>() ?: return null
         if (!containingClass.isTestClass()) {
@@ -31,6 +24,16 @@ object UniqueIdProducer {
         val path = getPathToTest(callElement) ?: return null
 
         return "[engine:failgood]/[class:${path.first()}($className)]/[class:${path[1]}]"
+    }
+
+    // return a ktCallElement if it is the parent or grandparent of the psiElement
+    private fun PsiElement.getKtCallElement(): KtCallElement? {
+        return if (this is KtCallElement) this
+        else
+            parent.let {
+                if (it is KtCallElement) it
+                else it.parent.let { if (it is KtCallElement) it else null }
+            }
     }
 
     private fun getPathToTest(declaration: KtCallElement): List<@NlsSafe String>? {

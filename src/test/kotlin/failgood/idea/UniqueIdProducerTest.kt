@@ -24,28 +24,22 @@ class RunTestLineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
                 contentEntry: ContentEntry
             ) {
                 super.configureModule(module, model, contentEntry)
-                /*
-                PsiTestUtil.addProjectLibrary(model, "annotations", listOf(PathUtil.getJarPathForClass(ApiStatus.OverrideOnly::class.java)))
-                PsiTestUtil.newLibrary("library")
-                    .classesRoot(testDataPath)
-                    .externalAnnotationsRoot("$testDataPath/since-2.0")
-                    .addTo(model)*/
-
                 addFromMaven(model, "dev.failgood:failgood:0.8.3", false, DependencyScope.COMPILE)
             }
         }
 
-    override fun getProjectDescriptor(): ProjectDescriptor {
-        return projectDescriptor
-    }
+    override fun getProjectDescriptor(): ProjectDescriptor = projectDescriptor
 
-    fun testContributeRunInfo() {
+    fun testComputesUniqueIdForSimpleCase() {
         val psiFile = myFixture.configureByFile("FailGoodTests.kt")
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
-        val findElementAt = psiFile.findElementAt(myFixture.caretOffset)
-        val info = RunTestLineMarkerContributor().getInfo(findElementAt!!)
-        assert(info != null)
+        val element = psiFile.findElementAt(myFixture.caretOffset)!!
+        val uniqueId = UniqueIdProducer.computeUniqueId(element)
+        assertEquals(
+            "[engine:failgood]/[class:The test runner(FailGoodTests)]/[class:runs tests]",
+            uniqueId
+        )
     }
 
     override fun getTestDataPath(): String = File("src/test/testData/").absolutePath
