@@ -9,9 +9,9 @@ import com.intellij.openapi.roots.ModifiableRootModel
 import com.intellij.pom.java.LanguageLevel
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
 import com.intellij.util.PsiErrorElementUtil
+import java.io.File
 import org.jetbrains.idea.maven.utils.library.RepositoryLibraryProperties
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.File
 
 val CI = System.getenv("CI") != null
 
@@ -31,26 +31,40 @@ class RunTestLineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
     override fun getProjectDescriptor(): ProjectDescriptor = projectDescriptor
 
     fun testComputesUniqueIdForSimpleCase() {
-        val psiFile =
-            myFixture.configureByText(
-                "FailGoodTests.kt",
-                """import failgood.Test
+        test(
+            // language=kotlin
+            """import failgood.Test
+
 @Test
 class FailGoodTests {
-    val context = describe("The test runner") {
-        it<caret>("runs tests") { assert(true) }
-    }
+    val context = describe("The test runner") { it<caret>("runs tests") { assert(true) } }
 }
-"""
-            )
+""",
+            "[engine:failgood]/[class:The test runner(FailGoodTests)]/[class:runs tests]"
+        )
+    }
+
+    fun _testComputesUniqueIdForDeepNesting() {
+        test(
+            // language=kotlin
+            """import failgood.Test
+
+@Test
+class FailGoodTests {
+    val context = describe("level 1") { describe("level 2") { it<caret>("test") { assert(true) } } }
+}
+""",
+            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+        )
+    }
+
+    private fun test(source: String, expected: String) {
+        val psiFile = myFixture.configureByText("FailGoodTests.kt", source)
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
         val element = psiFile.findElementAt(myFixture.caretOffset)!!
         val uniqueId = UniqueIdProducer.computeUniqueId(element)
-        assertEquals(
-            "[engine:failgood]/[class:The test runner(FailGoodTests)]/[class:runs tests]",
-            uniqueId
-        )
+        assertEquals(expected, uniqueId)
     }
 
     override fun getTestDataPath(): String = File("src/test/testData/").absolutePath
