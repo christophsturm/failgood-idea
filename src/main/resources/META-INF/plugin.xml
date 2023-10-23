@@ -14,6 +14,7 @@
         <testFramework implementation="com.github.christophsturm.idea.FailgoodTestFramework"/>
         <testFinder implementation="com.github.christophsturm.idea.TestFinder"/>-->
         <runLineMarkerContributor language="kotlin" implementationClass="failgood.idea.RunTestLineMarkerContributor"/>
+        <runConfigurationProducer implementation="failgood.idea.RunConfigurationProducer"/>
 
     </extensions>
 
