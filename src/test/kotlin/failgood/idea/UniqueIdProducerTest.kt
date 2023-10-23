@@ -9,9 +9,9 @@ import com.intellij.openapi.roots.ModifiableRootModel
 import com.intellij.pom.java.LanguageLevel
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
 import com.intellij.util.PsiErrorElementUtil
-import java.io.File
 import org.jetbrains.idea.maven.utils.library.RepositoryLibraryProperties
 import org.jetbrains.kotlin.psi.KtFile
+import java.io.File
 
 val CI = System.getenv("CI") != null
 
@@ -31,7 +31,18 @@ class RunTestLineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
     override fun getProjectDescriptor(): ProjectDescriptor = projectDescriptor
 
     fun testComputesUniqueIdForSimpleCase() {
-        val psiFile = myFixture.configureByFile("FailGoodTests.kt")
+        val psiFile =
+            myFixture.configureByText(
+                "FailGoodTests.kt",
+                """import failgood.Test
+@Test
+class FailGoodTests {
+    val context = describe("The test runner") {
+        it<caret>("runs tests") { assert(true) }
+    }
+}
+"""
+            )
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
         val element = psiFile.findElementAt(myFixture.caretOffset)!!
