@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 val CI = System.getenv("CI") != null
 
-class RunTestLineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
+class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
     private val projectDescriptor =
         object : ProjectDescriptor(LanguageLevel.HIGHEST) {
             override fun configureModule(
