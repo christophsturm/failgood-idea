@@ -4,6 +4,7 @@ import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtCallElement
+import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -60,11 +61,19 @@ object UniqueIdProducer {
     }
 
     /** get the value of the first argument (must be a string) */
-    private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? =
-        (declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()
-                as? KtStringTemplateExpression)
-            ?.entries
-            ?.joinToString("") { it.text.replace("\\\"", "\"") }
+    private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? {
+        val firstParameter =
+            declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()
+        return when (firstParameter) {
+            is KtStringTemplateExpression -> {
+                firstParameter.entries.joinToString("") { it.text.replace("\\\"", "\"") }
+            }
+            is KtClassLiteralExpression -> {
+                firstParameter.receiverExpression?.text
+            }
+            else -> null
+        }
+    }
 }
 /** checks if a class is a failgood test class (has a @Test Annotation) */
 private fun KtClassOrObject.isTestClass(): Boolean {
