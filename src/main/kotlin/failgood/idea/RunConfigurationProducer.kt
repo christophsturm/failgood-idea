@@ -36,6 +36,7 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         // we only care about uniqueid run configs
         if (configuration.testType != JUnitConfiguration.TEST_UNIQUE_ID) return false
         val uniqueId = context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) }
-        return uniqueId != null && configuration.persistentData.uniqueIds.single<@NlsSafe String?>() == uniqueId
+        return uniqueId != null &&
+            configuration.persistentData.uniqueIds.single<@NlsSafe String?>() == uniqueId
     }
 }

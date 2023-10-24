@@ -66,14 +66,19 @@ object UniqueIdProducer {
             val firstParameter =
                 declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()
         ) {
-            is KtStringTemplateExpression -> {
-                firstParameter.entries.joinToString("") { it.text.replace("\\\"", "\"") }
-            }
-            is KtClassLiteralExpression -> {
-                firstParameter.receiverExpression?.text
-            }
+            is KtStringTemplateExpression -> firstParameter.asString()
+            is KtClassLiteralExpression -> firstParameter.receiverExpression?.text
+            /*
+            is KtNameReferenceExpression -> {
+                 val ne = firstParameter.getReferencedNameElement()
+                 val grandParent = ne.parent.parent as? KtValueArgument
+                 val ae = grandParent?.getArgumentExpression()
+             }*/
             else -> null
         }
+
+    private fun KtStringTemplateExpression.asString() =
+        entries.joinToString("") { it.text.replace("\\\"", "\"") }
 }
 /** checks if a class is a failgood test class (has a @Test Annotation) */
 private fun KtClassOrObject.isTestClass(): Boolean {
