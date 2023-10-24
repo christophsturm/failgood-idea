@@ -1,5 +1,6 @@
 package failgood.idea
 
+import com.intellij.icons.AllIcons
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor
 import com.intellij.lang.Language
 import com.intellij.openapi.module.Module
@@ -9,14 +10,10 @@ import javax.swing.Icon
 import org.jetbrains.kotlin.idea.KotlinLanguage
 
 class FailgoodTestFramework : TestFramework {
-    companion object {
-        val icon = EmptyIcon(0, 0)
-    }
-
     override fun getName(): String = "Failgood"
 
     override fun getIcon(): Icon {
-        return FailgoodTestFramework.icon
+        return AllIcons.RunConfigurations.TestState.Run
     }
 
     override fun isLibraryAttached(module: Module): Boolean {
