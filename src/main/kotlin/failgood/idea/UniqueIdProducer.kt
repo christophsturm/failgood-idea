@@ -36,9 +36,10 @@ object UniqueIdProducer {
             }
     }
 
+    val runnableNodeNames = setOf("it", "test", "describe", "context")
     private fun getPathToTest(declaration: KtCallElement): List<@NlsSafe String>? {
         val calleeName = getCalleeName(declaration) ?: return null
-        if (calleeName != "it" && calleeName != "test") return null
+        if (!runnableNodeNames.contains(calleeName)) return null
         val testName = getFirstParameter(declaration) ?: return null
         val parent = declaration.getStrictParentOfType<KtCallElement>()
         val contextName = getFirstParameter(parent!!) ?: return null
@@ -50,13 +51,14 @@ object UniqueIdProducer {
         return (calleeExpression as? KtNameReferenceExpression)?.getReferencedName()
     }
 
-    private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? {
-        val ste =
-            declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()
-                ?: return null
-        val ste2 = ste as? KtStringTemplateExpression ?: return null
-        return ste2.entries.joinToString("") { it.text.replace("\\\"", "\"") }
-    }
+    /**
+     * get the value of the first argument (must be a string)
+     */
+    private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? =
+        (declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()
+                as? KtStringTemplateExpression)
+            ?.entries
+            ?.joinToString("") { it.text.replace("\\\"", "\"") }
 }
 /** checks if a class is a failgood test class (has a @Test Annotation) */
 private fun KtClassOrObject.isTestClass(): Boolean {

@@ -58,8 +58,22 @@ class FailGoodTests {
         )
     }
 
+    fun testComputesUniqueIdForContext() {
+        test(
+            // language=kotlin
+            """import failgood.Test
+
+@Test
+class FailGoodTests {
+    val context = describe("level 1") { describe<caret>("level 2") { it("test") { assert(true) } } }
+}
+""",
+            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]"
+        )
+    }
     private fun test(source: String, expected: String) {
         val psiFile = myFixture.configureByText("FailGoodTests.kt", source)
+        // health checks of the testing environment
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
         val element = psiFile.findElementAt(myFixture.caretOffset)!!
