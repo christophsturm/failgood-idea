@@ -60,11 +60,12 @@ object UniqueIdProducer {
         return (calleeExpression as? KtNameReferenceExpression)?.getReferencedName()
     }
 
-    /** get the value of the first argument (must be a string) */
-    private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? {
-        val firstParameter =
-            declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()
-        return when (firstParameter) {
+    /** get the string value of the first argument (must be a string or a class) */
+    private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? =
+        when (
+            val firstParameter =
+                declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()
+        ) {
             is KtStringTemplateExpression -> {
                 firstParameter.entries.joinToString("") { it.text.replace("\\\"", "\"") }
             }
@@ -73,7 +74,6 @@ object UniqueIdProducer {
             }
             else -> null
         }
-    }
 }
 /** checks if a class is a failgood test class (has a @Test Annotation) */
 private fun KtClassOrObject.isTestClass(): Boolean {

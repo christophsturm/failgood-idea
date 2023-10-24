@@ -6,6 +6,7 @@ import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.junit.JUnitConfiguration
 import com.intellij.execution.junit.JUnitConfigurationType
 import com.intellij.openapi.diagnostic.logger
+import com.intellij.openapi.util.NlsSafe
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
 
@@ -25,7 +26,6 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         data.setUniqueIds(uniqueId)
         data.TEST_OBJECT = JUnitConfiguration.TEST_UNIQUE_ID
         configuration.name = "run $uniqueId"
-        log.warn("setupConfigurationFromContext($configuration, $context, ${sourceElement.get()}")
         return true
     }
 
@@ -36,8 +36,6 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         // we only care about uniqueid run configs
         if (configuration.testType != JUnitConfiguration.TEST_UNIQUE_ID) return false
         val uniqueId = context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) }
-        val b = uniqueId != null && configuration.persistentData.uniqueIds.single() == uniqueId
-        if (b) log.warn("returning true, whooohoo")
-        return b
+        return uniqueId != null && configuration.persistentData.uniqueIds.single<@NlsSafe String?>() == uniqueId
     }
 }
