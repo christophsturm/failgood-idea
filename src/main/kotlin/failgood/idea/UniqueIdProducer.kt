@@ -23,7 +23,8 @@ object UniqueIdProducer {
         val className = containingClass.getQualifiedName()
         val path = getPathToTest(callElement) ?: return null
 
-        return "[engine:failgood]/[class:${path.first()}($className)]/[class:${path[1]}]"
+        return "[engine:failgood]/[class:${path.first()}($className)]/" +
+            path.drop(1).joinToString("/") { "[class:$it]" }
     }
 
     // return a ktCallElement if it is the parent or grandparent of the psiElement
@@ -37,14 +38,20 @@ object UniqueIdProducer {
     }
 
     val runnableNodeNames = setOf("it", "test", "describe", "context")
+
     private fun getPathToTest(declaration: KtCallElement): List<@NlsSafe String>? {
         val calleeName = getCalleeName(declaration) ?: return null
         if (!runnableNodeNames.contains(calleeName)) return null
         return buildList<String> {
-            add(getFirstParameter(declaration) ?: return null)
-            val parent = declaration.getStrictParentOfType<KtCallElement>()
-            add(getFirstParameter(parent!!) ?: return null)
-        }.reversed()
+                add(getFirstParameter(declaration) ?: return null)
+                var nextDeclaration = declaration
+                while (true) {
+                    nextDeclaration =
+                        nextDeclaration.getStrictParentOfType<KtCallElement>() ?: break
+                    add(getFirstParameter(nextDeclaration) ?: return null)
+                }
+            }
+            .reversed()
     }
 
     private fun getCalleeName(declaration: KtCallElement): String? {
@@ -52,9 +59,7 @@ object UniqueIdProducer {
         return (calleeExpression as? KtNameReferenceExpression)?.getReferencedName()
     }
 
-    /**
-     * get the value of the first argument (must be a string)
-     */
+    /** get the value of the first argument (must be a string) */
     private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? =
         (declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()
                 as? KtStringTemplateExpression)

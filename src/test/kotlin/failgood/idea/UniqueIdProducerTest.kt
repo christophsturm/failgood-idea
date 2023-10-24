@@ -71,6 +71,7 @@ class FailGoodTests {
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]"
         )
     }
+
     private fun test(source: String, expected: String) {
         val psiFile = myFixture.configureByText("FailGoodTests.kt", source)
         // health checks of the testing environment
