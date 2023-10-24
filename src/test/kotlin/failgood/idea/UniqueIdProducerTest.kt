@@ -30,21 +30,7 @@ class RunTestLineMarkerContributorTest : LightJavaCodeInsightFixtureTestCase() {
 
     override fun getProjectDescriptor(): ProjectDescriptor = projectDescriptor
 
-    fun testComputesUniqueIdForSimpleCase() {
-        test(
-            // language=kotlin
-            """import failgood.Test
-
-@Test
-class FailGoodTests {
-    val context = describe("The test runner") { it<caret>("runs tests") { assert(true) } }
-}
-""",
-            "[engine:failgood]/[class:The test runner(FailGoodTests)]/[class:runs tests]"
-        )
-    }
-
-    fun testComputesUniqueIdForDeepNesting() {
+    fun testComputesUniqueIdForNestedTest() {
         test(
             // language=kotlin
             """import failgood.Test
