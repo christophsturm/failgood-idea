@@ -44,7 +44,7 @@ class FailGoodTests {
         )
     }
 
-    fun _testComputesUniqueIdForDeepNesting() {
+    fun testComputesUniqueIdForDeepNesting() {
         test(
             // language=kotlin
             """import failgood.Test

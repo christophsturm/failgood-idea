@@ -40,10 +40,11 @@ object UniqueIdProducer {
     private fun getPathToTest(declaration: KtCallElement): List<@NlsSafe String>? {
         val calleeName = getCalleeName(declaration) ?: return null
         if (!runnableNodeNames.contains(calleeName)) return null
-        val testName = getFirstParameter(declaration) ?: return null
-        val parent = declaration.getStrictParentOfType<KtCallElement>()
-        val contextName = getFirstParameter(parent!!) ?: return null
-        return listOf(contextName, testName)
+        return buildList<String> {
+            add(getFirstParameter(declaration) ?: return null)
+            val parent = declaration.getStrictParentOfType<KtCallElement>()
+            add(getFirstParameter(parent!!) ?: return null)
+        }.reversed()
     }
 
     private fun getCalleeName(declaration: KtCallElement): String? {
