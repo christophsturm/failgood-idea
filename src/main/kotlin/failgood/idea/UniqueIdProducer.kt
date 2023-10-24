@@ -72,7 +72,9 @@ object UniqueIdProducer {
             is KtClassLiteralExpression -> firstParameter.receiverExpression?.text
             is KtSimpleNameExpression -> {
                 val valDeclaration =
-                    firstParameter.reference?.resolve() as? KtDeclarationWithInitializer
+                    firstParameter.references
+                        .first() // { it.resolve() is KtDeclarationWithInitializer }
+                        ?.resolve() as? KtDeclarationWithInitializer
                 val initializer = valDeclaration?.initializer as? KtStringTemplateExpression
                 initializer?.asString()
             }
