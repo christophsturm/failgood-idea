@@ -1,2 +1,2 @@
-./gradlew spotlessApply
+./gradlew ktfmtFormat
 ./gradlew check

@@ -15,10 +15,9 @@ plugins {
 
     id("com.adarshr.test-logger") version "4.0.0"
     id("com.bnorm.power.kotlin-power-assert") version "0.13.0"
-    alias(libs.plugins.spotless)
-}
+    id("com.ncorti.ktfmt.gradle") version "0.14.0"
 
-spotless { kotlin { ktfmt("0.46").kotlinlangStyle() } }
+}
 
 group = properties("pluginGroup")
 version = properties("pluginVersion")
@@ -170,4 +169,9 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
 tasks.getByName("classpathIndexCleanup") {
     dependsOn(tasks.getByName("compileTestKotlin"))
     dependsOn(tasks.getByName("compileKotlin"))
+}
+
+tasks.getByName("check").dependsOn(tasks.getByName("ktfmtCheck"))
+ktfmt {
+    kotlinLangStyle()
 }
