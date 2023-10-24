@@ -1,17 +1,10 @@
-# failgood-idea
-
 ![Build](https://github.com/christophsturm/failgood-idea/workflows/Build/badge.svg)
 <!--
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 -->
-## This plugin does not do anything yet.
 
-### Contributing
-run `./gradlew check`
-
-Add `-ea -Didea.force.use.core.classloader=true` VM Parameters in your run config to run tests from IDEA.
-
+# failgood-idea
 
 <!--
 ## Template ToDo list
@@ -24,14 +17,14 @@ Add `-ea -Didea.force.use.core.classloader=true` VM Parameters in your run confi
 - [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
 -->
 <!-- Plugin description -->
-This will at some point be the official idea plugin for FailGood
+The official Failgood Plugin for IntelliJ IDEA.
 <!-- Plugin description end -->
 <!--
 ## Installation
 
 - Using IDE built-in plugin system:
 
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "failgood-idea"</kbd> >
+  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Failgood"</kbd> >
   <kbd>Install Plugin</kbd>
 
 - Manually:
@@ -45,3 +38,7 @@ Plugin based on the [IntelliJ Platform Plugin Template][template].
 
 [template]: https://github.com/JetBrains/intellij-platform-plugin-template
 -->
+
+
+### Contributing
+run `./gradlew check`
