@@ -37,10 +37,40 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
 
 @Test
 class FailGoodTests {
-    val context = describe("level 1") { describe("level 2") { it<caret>("test") { assert(true) } } }
+    val context =
+        describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
 }
 """,
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+        )
+    }
+    fun testReturnsNullForOpenBracket() {
+        // to make sure that we produce only one marker per runnable node
+        test(
+            // language=kotlin
+            """import failgood.Test
+
+@Test
+class FailGoodTests {
+    val context =
+        describe("level 1") { describe("level 2") { it<caret>("test") { assert(true) } } }
+}
+""",
+            null
+        )
+    }
+    fun testReturnsNullForString() {
+        test(
+            // language=kotlin
+            """import failgood.Test
+
+@Test
+class FailGoodTests {
+    val context =
+        describe("level 1") { describe("level 2") { it("t<caret>est") { assert(true) } } }
+}
+""",
+            null
         )
     }
 
@@ -51,7 +81,7 @@ class FailGoodTests {
 
 @Test
 class FailGoodTests {
-    val context = describe(Test::class) { describe("level 2") { it<caret>("test") { assert(true) } } }
+    val context = describe(Test::class) { describe("level 2") { i<caret>t("test") { assert(true) } } }
 }
 """,
             "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
@@ -66,7 +96,7 @@ class FailGoodTests {
 @Test
 class FailGoodTests {
     val rootContextValName="rootContext"
-    val context = describe(rootContextValName) { describe("level 2") { it<caret>("test") { assert(true) } } }
+    val context = describe(rootContextValName) { describe("level 2") { i<caret>t("test") { assert(true) } } }
 }
 """,
             "[engine:failgood]/[class:rootContext(FailGoodTests)]/[class:level 2]/[class:test]"
@@ -80,14 +110,14 @@ class FailGoodTests {
 
 @Test
 class FailGoodTests {
-    val context = describe("level 1") { describe<caret>("level 2") { it("test") { assert(true) } } }
+    val context = describe("level 1") { describ<caret>e("level 2") { it("test") { assert(true) } } }
 }
 """,
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]"
         )
     }
 
-    private fun test(source: String, expected: String) {
+    private fun test(source: String, expected: String?) {
         val psiFile = myFixture.configureByText("FailGoodTests.kt", source)
         // health checks of the testing environment
         assertInstanceOf(psiFile, KtFile::class.java)

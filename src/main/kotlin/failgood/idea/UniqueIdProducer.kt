@@ -2,6 +2,7 @@ package failgood.idea
 
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
+import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import org.jetbrains.kotlin.psi.KtCallElement
@@ -18,6 +19,8 @@ object UniqueIdProducer {
     fun computeUniqueId(e: PsiElement): UniqueId? {
         if (e.firstChild != null)
             return null // "line markers should only be added to leaf elements"
+        if (e.elementType.toString() != "IDENTIFIER")
+            return null
         val callElement = e.getKtCallElement() ?: return null
 
         val containingClass = callElement.getStrictParentOfType<KtClassOrObject>() ?: return null
