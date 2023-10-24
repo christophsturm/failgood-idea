@@ -6,8 +6,10 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtDeclarationWithInitializer
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
@@ -68,12 +70,12 @@ object UniqueIdProducer {
         ) {
             is KtStringTemplateExpression -> firstParameter.asString()
             is KtClassLiteralExpression -> firstParameter.receiverExpression?.text
-            /*
-            is KtNameReferenceExpression -> {
-                 val ne = firstParameter.getReferencedNameElement()
-                 val grandParent = ne.parent.parent as? KtValueArgument
-                 val ae = grandParent?.getArgumentExpression()
-             }*/
+            is KtSimpleNameExpression -> {
+                val valDeclaration =
+                    firstParameter.reference?.resolve() as? KtDeclarationWithInitializer
+                val initializer = valDeclaration?.initializer as? KtStringTemplateExpression
+                initializer?.asString()
+            }
             else -> null
         }
 

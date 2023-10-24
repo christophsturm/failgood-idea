@@ -58,7 +58,7 @@ class FailGoodTests {
         )
     }
 
-    fun _testComputesUniqueIdForNestedTestWithAsRootDescriptionDefinedInAVal() {
+    fun testComputesUniqueIdForNestedTestWithAsRootDescriptionDefinedInAVal() {
         test(
             // language=kotlin
             """import failgood.Test
