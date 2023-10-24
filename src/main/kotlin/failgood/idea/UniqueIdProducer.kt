@@ -2,7 +2,6 @@ package failgood.idea
 
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
-import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
 import org.jetbrains.kotlin.psi.KtCallElement
@@ -19,8 +18,11 @@ object UniqueIdProducer {
     fun computeUniqueId(e: PsiElement): UniqueId? {
         if (e.firstChild != null)
             return null // "line markers should only be added to leaf elements"
-        if (e.elementType.toString() != "IDENTIFIER")
-            return null
+
+        // show the run marker only on the identifier of the call (fpr example the "it" or
+        // "describe")
+        // to avoid duplicate markers
+        if (e.elementType.toString() != "IDENTIFIER") return null
         val callElement = e.getKtCallElement() ?: return null
 
         val containingClass = callElement.getStrictParentOfType<KtClassOrObject>() ?: return null
@@ -30,8 +32,11 @@ object UniqueIdProducer {
         val className = containingClass.getQualifiedName()
         val path = getPathToTest(callElement) ?: return null
 
-        return UniqueId("[engine:failgood]/[class:${path.first()}($className)]/" +
-            path.drop(1).joinToString("/") { "[class:$it]" }, path.last())
+        return UniqueId(
+            "[engine:failgood]/[class:${path.first()}($className)]/" +
+                path.drop(1).joinToString("/") { "[class:$it]" },
+            path.last()
+        )
     }
 
     // return a ktCallElement if it is the parent or grandparent of the psiElement
@@ -117,4 +122,5 @@ fun KtClassOrObject.getQualifiedName(): String? {
     parts.reverse()
     return parts.joinToString(separator = ".")
 }
+
 data class UniqueId(val uniqueId: String, val friendlyName: String)

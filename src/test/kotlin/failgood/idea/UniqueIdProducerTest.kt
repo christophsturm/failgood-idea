@@ -44,6 +44,7 @@ class FailGoodTests {
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
+
     fun testReturnsNullForOpenBracket() {
         // to make sure that we produce only one marker per runnable node
         test(
@@ -59,6 +60,7 @@ class FailGoodTests {
             null
         )
     }
+
     fun testReturnsNullForString() {
         test(
             // language=kotlin
