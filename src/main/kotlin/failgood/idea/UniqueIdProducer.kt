@@ -1,6 +1,5 @@
 package failgood.idea
 
-import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
@@ -43,18 +42,21 @@ object UniqueIdProducer {
     private fun PsiElement.getKtCallElement(): KtCallElement? {
         return if (this is KtCallElement) this
         else
-            parent.let {
-                if (it is KtCallElement) it
-                else it.parent.let { if (it is KtCallElement) it else null }
+            parent.let { parent ->
+                if (parent is KtCallElement) parent
+                else
+                    parent.parent.let { grandParent ->
+                        if (grandParent is KtCallElement) grandParent else null
+                    }
             }
     }
 
-    val runnableNodeNames = setOf("it", "test", "describe", "context")
+    private val runnableNodeNames = setOf("it", "test", "describe", "context")
 
-    private fun getPathToTest(declaration: KtCallElement): List<@NlsSafe String>? {
+    private fun getPathToTest(declaration: KtCallElement): List<String>? {
         val calleeName = getCalleeName(declaration) ?: return null
         if (!runnableNodeNames.contains(calleeName)) return null
-        return buildList<String> {
+        return buildList {
                 add(getFirstParameter(declaration) ?: return null)
                 var nextDeclaration = declaration
                 while (true) {
@@ -72,7 +74,7 @@ object UniqueIdProducer {
     }
 
     /** get the string value of the first argument (must be a string or a class) */
-    private fun getFirstParameter(declaration: KtCallElement): @NlsSafe String? =
+    private fun getFirstParameter(declaration: KtCallElement): String? =
         when (
             val firstParameter =
                 declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()

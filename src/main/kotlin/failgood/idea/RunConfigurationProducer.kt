@@ -5,12 +5,10 @@ import com.intellij.execution.actions.LazyRunConfigurationProducer
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.junit.JUnitConfiguration
 import com.intellij.execution.junit.JUnitConfigurationType
-import com.intellij.openapi.diagnostic.logger
-import com.intellij.openapi.util.NlsSafe
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
 
-private val log = logger<RunConfigurationProducer>()
+// private val log = logger<RunConfigurationProducer>()
 
 internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConfiguration>() {
     override fun getConfigurationFactory(): ConfigurationFactory =
@@ -36,7 +34,6 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         // we only care about uniqueid run configs
         if (configuration.testType != JUnitConfiguration.TEST_UNIQUE_ID) return false
         val uniqueId = context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) }?.uniqueId
-        return uniqueId != null &&
-            configuration.persistentData.uniqueIds.single<@NlsSafe String?>() == uniqueId
+        return uniqueId != null && configuration.persistentData.uniqueIds.single() == uniqueId
     }
 }

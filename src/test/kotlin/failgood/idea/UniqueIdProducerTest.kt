@@ -13,7 +13,7 @@ import java.io.File
 import org.jetbrains.idea.maven.utils.library.RepositoryLibraryProperties
 import org.jetbrains.kotlin.psi.KtFile
 
-val CI = System.getenv("CI") != null
+// val CI = System.getenv("CI") != null
 
 class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
     private val projectDescriptor =

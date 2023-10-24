@@ -3,10 +3,9 @@ package failgood.idea
 import com.intellij.execution.lineMarker.ExecutorAction
 import com.intellij.execution.lineMarker.RunLineMarkerContributor
 import com.intellij.icons.AllIcons
-import com.intellij.openapi.diagnostic.logger
 import com.intellij.psi.PsiElement
 
-private val log = logger<RunTestLineMarkerContributor>()
+// private val log = logger<RunTestLineMarkerContributor>()
 
 class RunTestLineMarkerContributor : RunLineMarkerContributor() {
     override fun getInfo(e: PsiElement): Info? {
