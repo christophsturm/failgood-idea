@@ -1,4 +1,5 @@
-![Build](https://github.com/christophsturm/failgood-idea/workflows/Build/badge.svg)
+[![Github CI](https://github.com/christophsturm/failgood-idea/workflows/Build/badge.svg)](https://github.com/christophsturm/failgood-idea/actions)
+
 <!--
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)

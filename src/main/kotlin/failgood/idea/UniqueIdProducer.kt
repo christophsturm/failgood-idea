@@ -18,9 +18,8 @@ object UniqueIdProducer {
         if (e.firstChild != null)
             return null // "line markers should only be added to leaf elements"
 
-        // show the run marker only on the identifier of the call (fpr example the "it" or
-        // "describe")
-        // to avoid duplicate markers
+        // show the run marker only on the identifier of the call
+        // (for example the "it" or "describe") to avoid duplicate markers
         if (e.elementType.toString() != "IDENTIFIER") return null
         val callElement = e.getKtCallElement() ?: return null
 
