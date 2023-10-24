@@ -93,7 +93,7 @@ class FailGoodTests {
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
         val element = psiFile.findElementAt(myFixture.caretOffset)!!
-        val uniqueId = UniqueIdProducer.computeUniqueId(element)
+        val uniqueId = UniqueIdProducer.computeUniqueId(element)?.uniqueId
         assertEquals(expected, uniqueId)
     }
 

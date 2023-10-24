@@ -3,6 +3,7 @@ package failgood.idea
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.elementType
 import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -14,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 object UniqueIdProducer {
-    fun computeUniqueId(e: PsiElement): String? {
+    fun computeUniqueId(e: PsiElement): UniqueId? {
         if (e.firstChild != null)
             return null // "line markers should only be added to leaf elements"
         val callElement = e.getKtCallElement() ?: return null
@@ -26,8 +27,8 @@ object UniqueIdProducer {
         val className = containingClass.getQualifiedName()
         val path = getPathToTest(callElement) ?: return null
 
-        return "[engine:failgood]/[class:${path.first()}($className)]/" +
-            path.drop(1).joinToString("/") { "[class:$it]" }
+        return UniqueId("[engine:failgood]/[class:${path.first()}($className)]/" +
+            path.drop(1).joinToString("/") { "[class:$it]" }, path.last())
     }
 
     // return a ktCallElement if it is the parent or grandparent of the psiElement
@@ -113,3 +114,4 @@ fun KtClassOrObject.getQualifiedName(): String? {
     parts.reverse()
     return parts.joinToString(separator = ".")
 }
+data class UniqueId(val uniqueId: String, val friendlyName: String)

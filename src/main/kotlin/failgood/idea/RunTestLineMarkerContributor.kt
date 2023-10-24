@@ -5,17 +5,17 @@ import com.intellij.execution.lineMarker.RunLineMarkerContributor
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.elementType
 
 private val log = logger<RunTestLineMarkerContributor>()
 
 class RunTestLineMarkerContributor : RunLineMarkerContributor() {
     override fun getInfo(e: PsiElement): Info? {
         val uniqueId = UniqueIdProducer.computeUniqueId(e) ?: return null
-
-        // [engine:failgood]/[class:SingleTestExecutor(failgood.internal.SingleTestExecutorTest)]/[class:test execution]/[method:executes a single test]
+//        log.warn("returning $uniqueId for ${e.text}")
         return Info(
             AllIcons.RunConfigurations.TestState.Run,
-            { "run $uniqueId" },
+            { uniqueId.friendlyName },
             *ExecutorAction.getActions(1)
         )
     }
