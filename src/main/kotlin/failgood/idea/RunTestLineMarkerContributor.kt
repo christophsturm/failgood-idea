@@ -13,7 +13,7 @@ class RunTestLineMarkerContributor : RunLineMarkerContributor() {
         //        log.warn("returning $uniqueId for ${e.text}")
         return Info(
             AllIcons.RunConfigurations.TestState.Run,
-            { uniqueId.friendlyName },
+            { "run ${uniqueId.friendlyName}" },
             *ExecutorAction.getActions(1)
         )
     }
