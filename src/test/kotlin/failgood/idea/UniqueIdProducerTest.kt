@@ -91,6 +91,20 @@ class FailGoodTests {
         )
     }
 
+    fun _testComputesUniqueIdForNestedTestWithGenericClassAsRootDescription() {
+        test(
+            // language=kotlin
+            """import failgood.Test
+
+@Test
+class FailGoodTests {
+    val context = describe<Test> { describe("level 2") { i<caret>t("test") { assert(true) } } }
+}
+""",
+            "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
+        )
+    }
+
     fun testComputesUniqueIdForNestedTestWithClassAsRootDescription() {
         test(
             // language=kotlin
