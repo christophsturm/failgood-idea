@@ -76,7 +76,7 @@ object UniqueIdProducer {
     private fun getFirstParameter(declaration: KtCallElement): String? =
         when (
             val firstParameter =
-                declaration.valueArgumentList?.children?.singleOrNull()?.children?.singleOrNull()
+                declaration.valueArgumentList?.children?.firstOrNull()?.children?.singleOrNull()
         ) {
             is KtStringTemplateExpression -> firstParameter.asString()
             is KtClassLiteralExpression -> firstParameter.receiverExpression?.text

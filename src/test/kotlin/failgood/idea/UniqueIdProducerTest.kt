@@ -91,7 +91,7 @@ class FailGoodTests {
         )
     }
 
-    fun _testComputesUniqueIdForNestedTestWithGenericClassAsRootDescription() {
+    fun _testWorksForNestedTestWithGenericClassAsRootDescription() {
         test(
             // language=kotlin
             """import failgood.Test
@@ -105,7 +105,26 @@ class FailGoodTests {
         )
     }
 
-    fun testComputesUniqueIdForNestedTestWithClassAsRootDescription() {
+    fun testWorksForThirdPartyDescribe() {
+        // support third party describe methods as long as their first parameter is the name of the
+        // context that they create
+        test(
+            // language=kotlin
+            """import failgood.Test
+import failgood.dsl.ContextLambda
+
+
+fun describeOther(name: String, otherParameter: String, ContextLambda: lambda) = describe(name, function = lambda)
+@Test
+class FailGoodTests {
+    val context = describeOther("Test", "blah") { describe("level 2") { i<caret>t("test") { assert(true) } } }
+}
+""",
+            "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
+        )
+    }
+
+    fun testWorksForClassAsRootDescription() {
         test(
             // language=kotlin
             """import failgood.Test
