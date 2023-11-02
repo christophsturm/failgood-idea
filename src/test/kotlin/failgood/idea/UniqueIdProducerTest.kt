@@ -45,6 +45,21 @@ class FailGoodTests {
         )
     }
 
+    fun testWorksForTestsDefinedInObject() {
+        test(
+            // language=kotlin
+            """import failgood.Test
+
+@Test
+object FailGoodTests {
+    val context =
+        describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
+}
+""",
+            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+        )
+    }
+
     fun testReturnsNullForOpenBracket() {
         // to make sure that we produce only one marker per runnable node
         test(
