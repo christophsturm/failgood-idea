@@ -10,17 +10,8 @@
     <depends>JUnit</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-<!--        <applicationService serviceImplementation="com.github.christophsturm.idea.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.christophsturm.idea.services.MyProjectService"/>
-        <testFramework implementation="com.github.christophsturm.idea.FailgoodTestFramework"/>
-        <testFinder implementation="com.github.christophsturm.idea.TestFinder"/>-->
         <runLineMarkerContributor language="kotlin" implementationClass="failgood.idea.RunTestLineMarkerContributor"/>
         <runConfigurationProducer implementation="failgood.idea.RunConfigurationProducer"/>
-
     </extensions>
 
-    <applicationListeners>
-<!--        <listener class="com.github.christophsturm.idea.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
-    </applicationListeners>
 </idea-plugin>

@@ -18,7 +18,11 @@
 - [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
 -->
 <!-- Plugin description -->
-The official Failgood Plugin for IntelliJ IDEA.
+
+        The Idea plugin for Failgood. Creates Run configurations for single tests or Sub-contexts from the Editor.
+
+        Failgood works pretty well in idea without a plugin via the junit platform support.
+        This plugin adds the option to create a run config that runs a single test or a subcontext.
 <!-- Plugin description end -->
 <!--
 ## Installation
