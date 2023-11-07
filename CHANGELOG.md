@@ -2,6 +2,15 @@
 
 # failgood-idea Changelog
 
+## [Unreleased]
+
+## [0.0.2]
+
+### Changed
+
+- Removed default icon
+- Updated plugin description
+
 ## [0.0.1]
 
 ### Added

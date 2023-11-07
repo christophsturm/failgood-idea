@@ -1,2 +1,3 @@
 ./gradlew ktfmtFormat
 ./gradlew check
+./gradlew getChangelog --unreleased --no-header --console=plain -q
