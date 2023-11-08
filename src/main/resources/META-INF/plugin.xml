@@ -3,6 +3,13 @@
     <id>failgood.idea</id>
     <name>Failgood</name>
     <vendor>christophsturm</vendor>
+    <description>
+        The Idea plugin for failgood: https://failgood.dev. Creates Run configurations for single tests or Sub-contexts
+        from the Editor.
+
+        Failgood works pretty well in idea without a plugin via the junit platform support.
+        This plugin adds the option to create a run config that runs a single test or a subcontext.
+    </description>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.kotlin</depends>
