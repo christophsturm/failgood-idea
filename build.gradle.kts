@@ -38,7 +38,7 @@ dependencies {
     testRuntimeOnly(libs.junitVintageEngine)
     testImplementation(libs.junitVintageEngine)
     //    compileOnly("org.jetbrains.kotlin:kotlin-compiler:1.9.10")
-    testImplementation("dev.failgood:failgood:0.8.3")
+    testImplementation("dev.failgood:failgood:0.9.1")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
