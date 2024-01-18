@@ -33,13 +33,9 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
 
     fun testComputesUniqueIdForNestedTest() {
         test(
-            """import failgood.Test
-
-@Test
-class FailGoodTests {
+            """
     val context =
         describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
-}
 """,
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
         )
@@ -47,13 +43,9 @@ class FailGoodTests {
 
     fun testWorksForTestsDefinedInObject() {
         test(
-            """import failgood.Test
-
-@Test
-object FailGoodTests {
+            """
     val context =
         describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
-}
 """,
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
         )
@@ -62,13 +54,9 @@ object FailGoodTests {
     fun testReturnsNullForOpenBracket() {
         // to make sure that we produce only one marker per runnable node
         test(
-            """import failgood.Test
-
-@Test
-class FailGoodTests {
+            """
     val context =
         describe("level 1") { describe("level 2") { it<caret>("test") { assert(true) } } }
-}
 """,
             null
         )
@@ -76,13 +64,9 @@ class FailGoodTests {
 
     fun testReturnsNullForString() {
         test(
-            """import failgood.Test
-
-@Test
-class FailGoodTests {
+            """
     val context =
         describe("level 1") { describe("level 2") { it("t<caret>est") { assert(true) } } }
-}
 """,
             null
         )
@@ -90,12 +74,8 @@ class FailGoodTests {
 
     fun _testWorksForNestedTestWithGenericClassAsRootDescription() {
         test(
-            """import failgood.Test
-
-@Test
-class FailGoodTests {
+            """
     val context = describe<Test> { describe("level 2") { i<caret>t("test") { assert(true) } } }
-}
 """,
             "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
         )
@@ -105,28 +85,20 @@ class FailGoodTests {
         // support third party describe methods as long as their first parameter is the name of the
         // context that they create
         test(
-            """import failgood.Test
-import failgood.dsl.ContextLambda
-
-
-fun describeOther(name: String, otherParameter: String, ContextLambda: lambda) = describe(name, function = lambda)
-@Test
-class FailGoodTests {
+            """
     val context = describeOther("Test", "blah") { describe("level 2") { i<caret>t("test") { assert(true) } } }
-}
 """,
-            "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]",
+            """import failgood.dsl.ContextLambda
+fun describeOther(name: String, otherParameter: String, ContextLambda: lambda) = describe(name, function = lambda)
+"""
         )
     }
 
     fun testWorksForClassAsRootDescription() {
         test(
-            """import failgood.Test
-
-@Test
-class FailGoodTests {
+            """
     val context = describe(Test::class) { describe("level 2") { i<caret>t("test") { assert(true) } } }
-}
 """,
             "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
         )
@@ -134,13 +106,20 @@ class FailGoodTests {
 
     fun testComputesUniqueIdForNestedTestWithAsRootDescriptionDefinedInAVal() {
         test(
-            """import failgood.Test
-
-@Test
-class FailGoodTests {
+            """
+    @Suppress("MayBeConstant")
     val rootContextValName="rootContext"
     val context = describe(rootContextValName) { describe("level 2") { i<caret>t("test") { assert(true) } } }
-}
+""",
+            "[engine:failgood]/[class:rootContext(FailGoodTests)]/[class:level 2]/[class:test]"
+        )
+    }
+
+    fun testComputesUniqueIdForNestedTestWithAsRootDescriptionDefinedInAConstVal() {
+        test(
+            """
+    const val rootContextValName="rootContext"
+    val context = describe(rootContextValName) { describe("level 2") { i<caret>t("test") { assert(true) } } }
 """,
             "[engine:failgood]/[class:rootContext(FailGoodTests)]/[class:level 2]/[class:test]"
         )
@@ -148,19 +127,26 @@ class FailGoodTests {
 
     fun testComputesUniqueIdForContext() {
         test(
-            """import failgood.Test
-
-@Test
-class FailGoodTests {
+            """
     val context = describe("level 1") { describ<caret>e("level 2") { it("test") { assert(true) } } }
-}
 """,
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]"
         )
     }
 
-    private fun test(@Language("kotlin") source: String, expected: String?) {
-        val psiFile = myFixture.configureByText("FailGoodTests.kt", source)
+    private fun test(
+        @Language("kotlin") source: String,
+        expected: String?,
+        additionalPrefix: String = ""
+    ) {
+        @Language("kotlin")
+        val completeSource =
+            """import failgood.Test
+$additionalPrefix
+
+@Test
+class FailGoodTests {$source}"""
+        val psiFile = myFixture.configureByText("FailGoodTests.kt", completeSource)
         // health checks of the testing environment
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
