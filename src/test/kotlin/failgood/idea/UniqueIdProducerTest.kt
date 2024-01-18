@@ -42,11 +42,15 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
     }
 
     fun testWorksForTestsDefinedInObject() {
-        test(
-            """
-    val context =
-        describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
-""",
+        testFull(
+            """import failgood.Test
+${""}
+
+@Test
+object FailGoodTests {${
+                """val context = describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
+"""
+            }}""",
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
@@ -54,9 +58,7 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
     fun testReturnsNullForOpenBracket() {
         // to make sure that we produce only one marker per runnable node
         test(
-            """
-    val context =
-        describe("level 1") { describe("level 2") { it<caret>("test") { assert(true) } } }
+            """val context = describe("level 1") { describe("level 2") { it<caret>("test") { assert(true) } } }
 """,
             null
         )
@@ -145,7 +147,13 @@ fun describeOther(name: String, otherParameter: String, ContextLambda: lambda) =
 $additionalPrefix
 
 @Test
-class FailGoodTests {$source}"""
+class FailGoodTests {
+$source
+}"""
+        testFull(completeSource, expected)
+    }
+
+    private fun testFull(completeSource: String, expected: String?) {
         val psiFile = myFixture.configureByText("FailGoodTests.kt", completeSource)
         // health checks of the testing environment
         assertInstanceOf(psiFile, KtFile::class.java)
