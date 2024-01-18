@@ -10,6 +10,7 @@ import com.intellij.pom.java.LanguageLevel
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
 import com.intellij.util.PsiErrorElementUtil
 import java.io.File
+import org.intellij.lang.annotations.Language
 import org.jetbrains.idea.maven.utils.library.RepositoryLibraryProperties
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -32,7 +33,6 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
 
     fun testComputesUniqueIdForNestedTest() {
         test(
-            // language=kotlin
             """import failgood.Test
 
 @Test
@@ -47,7 +47,6 @@ class FailGoodTests {
 
     fun testWorksForTestsDefinedInObject() {
         test(
-            // language=kotlin
             """import failgood.Test
 
 @Test
@@ -63,7 +62,6 @@ object FailGoodTests {
     fun testReturnsNullForOpenBracket() {
         // to make sure that we produce only one marker per runnable node
         test(
-            // language=kotlin
             """import failgood.Test
 
 @Test
@@ -78,7 +76,6 @@ class FailGoodTests {
 
     fun testReturnsNullForString() {
         test(
-            // language=kotlin
             """import failgood.Test
 
 @Test
@@ -93,7 +90,6 @@ class FailGoodTests {
 
     fun _testWorksForNestedTestWithGenericClassAsRootDescription() {
         test(
-            // language=kotlin
             """import failgood.Test
 
 @Test
@@ -109,7 +105,6 @@ class FailGoodTests {
         // support third party describe methods as long as their first parameter is the name of the
         // context that they create
         test(
-            // language=kotlin
             """import failgood.Test
 import failgood.dsl.ContextLambda
 
@@ -126,7 +121,6 @@ class FailGoodTests {
 
     fun testWorksForClassAsRootDescription() {
         test(
-            // language=kotlin
             """import failgood.Test
 
 @Test
@@ -140,7 +134,6 @@ class FailGoodTests {
 
     fun testComputesUniqueIdForNestedTestWithAsRootDescriptionDefinedInAVal() {
         test(
-            // language=kotlin
             """import failgood.Test
 
 @Test
@@ -155,7 +148,6 @@ class FailGoodTests {
 
     fun testComputesUniqueIdForContext() {
         test(
-            // language=kotlin
             """import failgood.Test
 
 @Test
@@ -167,7 +159,7 @@ class FailGoodTests {
         )
     }
 
-    private fun test(source: String, expected: String?) {
+    private fun test(@Language("kotlin") source: String, expected: String?) {
         val psiFile = myFixture.configureByText("FailGoodTests.kt", source)
         // health checks of the testing environment
         assertInstanceOf(psiFile, KtFile::class.java)
