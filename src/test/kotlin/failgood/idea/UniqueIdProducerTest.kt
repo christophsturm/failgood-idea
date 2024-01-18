@@ -41,14 +41,23 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
         )
     }
 
+    fun testComputesUniqueIdForNestedTestWithMinimalWhitespace() {
+        test(
+            """val context = describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }""",
+            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+        )
+    }
+
     fun testWorksForTestsDefinedInObject() {
         testFull(
             """import failgood.Test
+
 @Test
-object FailGoodTests {${
-                """val context = describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
-"""
-            }}""",
+object FailGoodTests {
+    val context =
+        describe("level 1") { describe("level 2") { i<caret>t ("test") { assert(true) } } }
+}
+""",
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
