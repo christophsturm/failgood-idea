@@ -44,8 +44,6 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
     fun testWorksForTestsDefinedInObject() {
         testFull(
             """import failgood.Test
-${""}
-
 @Test
 object FailGoodTests {${
                 """val context = describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
@@ -86,14 +84,16 @@ object FailGoodTests {${
     fun testWorksForThirdPartyDescribe() {
         // support third party describe methods as long as their first parameter is the name of the
         // context that they create
-        test(
-            """
-    val context = describeOther("Test", "blah") { describe("level 2") { i<caret>t("test") { assert(true) } } }
-""",
-            "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]",
-            """import failgood.dsl.ContextLambda
+        testFull(
+            """import failgood.Test
+import failgood.dsl.ContextLambda
 fun describeOther(name: String, otherParameter: String, ContextLambda: lambda) = describe(name, function = lambda)
-"""
+
+@Test
+class FailGoodTests {
+    val context = describeOther("Test", "blah") { describe("level 2") { i<caret>t("test") { assert(true) } } } }
+""",
+            "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
@@ -136,16 +136,9 @@ fun describeOther(name: String, otherParameter: String, ContextLambda: lambda) =
         )
     }
 
-    private fun test(
-        @Language("kotlin") source: String,
-        expected: String?,
-        additionalPrefix: String = ""
-    ) {
+    private fun test(@Language("kotlin") source: String, expected: String?) {
         @Language("kotlin")
-        val completeSource =
-            """import failgood.Test
-$additionalPrefix
-
+        val completeSource = """import failgood.Test
 @Test
 class FailGoodTests {
 $source
@@ -153,8 +146,8 @@ $source
         testFull(completeSource, expected)
     }
 
-    private fun testFull(completeSource: String, expected: String?) {
-        val psiFile = myFixture.configureByText("FailGoodTests.kt", completeSource)
+    private fun testFull(@Language("kotlin") source: String, expected: String?) {
+        val psiFile = myFixture.configureByText("FailGoodTests.kt", source)
         // health checks of the testing environment
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
