@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+- Support IDEA 2023.1 and 2023.4 EAP
+- Support failgood 0.9
+
 ## [0.0.3]
 
 ### Changed

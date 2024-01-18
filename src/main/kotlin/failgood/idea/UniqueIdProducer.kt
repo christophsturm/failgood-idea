@@ -29,9 +29,13 @@ object UniqueIdProducer {
         }
         val className = containingClass.getQualifiedName()
         val path = getPathToTest(callElement) ?: return null
+        // only root may be unnamed
+        if (path.drop(1).any { it == "unnamed" }) return null
+        // if root is unnamed its named like the class
+        val testCollectionName = path.first().let { if (it == "unnamed") className else it }
 
         return UniqueId(
-            "[engine:failgood]/[class:${path.first()}($className)]/" +
+            "[engine:failgood]/[class:$testCollectionName($className)]/" +
                 path.drop(1).joinToString("/") { "[class:$it]" },
             path.last()
         )
@@ -56,12 +60,12 @@ object UniqueIdProducer {
         val calleeName = getCalleeName(declaration) ?: return null
         if (!runnableNodeNames.contains(calleeName)) return null
         return buildList {
-                add(getFirstParameter(declaration) ?: return null)
+                add(getContextOrTestName(declaration) ?: return null)
                 var nextDeclaration = declaration
                 while (true) {
                     nextDeclaration =
                         nextDeclaration.getStrictParentOfType<KtCallElement>() ?: break
-                    add(getFirstParameter(nextDeclaration) ?: return null)
+                    add(getContextOrTestName(nextDeclaration) ?: return null)
                 }
             }
             .reversed()
@@ -73,7 +77,7 @@ object UniqueIdProducer {
     }
 
     /** get the string value of the first argument (must be a string or a class) */
-    private fun getFirstParameter(declaration: KtCallElement): String? =
+    private fun getContextOrTestName(declaration: KtCallElement): String? =
         when (
             val firstParameter =
                 declaration.valueArgumentList?.children?.firstOrNull()?.children?.singleOrNull()
@@ -87,6 +91,9 @@ object UniqueIdProducer {
                         ?.resolve() as? KtDeclarationWithInitializer
                 val initializer = valDeclaration?.initializer as? KtStringTemplateExpression
                 initializer?.asString()
+            }
+            null -> {
+                if (getCalleeName(declaration) == "tests") "unnamed" else null
             }
             else -> null
         }

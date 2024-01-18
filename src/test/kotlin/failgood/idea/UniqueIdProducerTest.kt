@@ -25,19 +25,39 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
                 contentEntry: ContentEntry
             ) {
                 super.configureModule(module, model, contentEntry)
-                addFromMaven(model, "dev.failgood:failgood:0.8.3", false, DependencyScope.COMPILE)
+                addFromMaven(model, "dev.failgood:failgood:0.9.1", false, DependencyScope.COMPILE)
             }
         }
 
     override fun getProjectDescriptor(): ProjectDescriptor = projectDescriptor
 
-    fun testComputesUniqueIdForNestedTest() {
+    fun testComputesUniqueIdForNestedTestWithDescribe() {
         test(
             """
     val context =
         describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
 """,
             "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+        )
+    }
+
+    fun testComputesUniqueIdForNestedTest() {
+        test(
+            """
+    val context =
+        testsFor("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
+""",
+            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+        )
+    }
+
+    fun testComputesUniqueIdForNestedTestInUnnamedTestCollection() {
+        test(
+            """
+    val context =
+        tests { describe("level 2") { i<caret>t("test") { assert(true) } } }
+""",
+            "[engine:failgood]/[class:FailGoodTests(FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
