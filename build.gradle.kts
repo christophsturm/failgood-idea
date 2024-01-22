@@ -4,7 +4,7 @@ import java.util.Locale
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.50.0"
+    id("com.github.ben-manes.versions") version "0.51.0"
     id("java")
     alias(libs.plugins.kotlin) // Kotlin support
     alias(libs.plugins.gradleIntelliJPlugin) // Gradle IntelliJ Plugin
