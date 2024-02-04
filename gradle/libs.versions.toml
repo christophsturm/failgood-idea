@@ -1,7 +1,7 @@
 [versions]
 # libraries
 annotations = "24.1.0"
-junit = "5.10.1"
+junit = "5.10.2"
 failgood = "0.9.1"
 
 # plugins
