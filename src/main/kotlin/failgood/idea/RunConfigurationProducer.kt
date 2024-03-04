@@ -1,6 +1,7 @@
 package failgood.idea
 
 import com.intellij.execution.actions.ConfigurationContext
+import com.intellij.execution.actions.ConfigurationFromContext
 import com.intellij.execution.actions.LazyRunConfigurationProducer
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.junit.JUnitConfiguration
@@ -44,4 +45,38 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         if (b) log.info("${configuration.name} is from us")
         return b
     }
+
+    override fun isPreferredConfiguration(
+        self: ConfigurationFromContext?,
+        other: ConfigurationFromContext?
+    ): Boolean {
+        if (self == null) {
+            log.error("self is null")
+            return false
+        }
+        if (other == null) {
+            log.error("other is null")
+            return false
+        }
+
+        val configuration = self.configuration
+        if (configuration !is JUnitConfiguration) {
+            log.error("unexpected: self is not junit")
+            return false
+        }
+        // is self from us?
+        val fromUs =
+            configuration.testType == JUnitConfiguration.TEST_UNIQUE_ID &&
+                configuration.persistentData.uniqueIds.singleOrNull()?.contains("failgood") == true
+        if (!fromUs) {
+            log.error("unexpected: self is not from us")
+        }
+
+        return true
+    }
+
+    override fun shouldReplace(
+        self: ConfigurationFromContext,
+        other: ConfigurationFromContext
+    ): Boolean = true
 }
