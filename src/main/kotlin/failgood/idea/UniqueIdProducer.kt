@@ -27,15 +27,15 @@ object UniqueIdProducer {
         if (!containingClass.isTestClass()) {
             return null
         }
-        val className = containingClass.getQualifiedName()
         val path = getPathToTest(callElement) ?: return null
         // only root may be unnamed
         if (path.drop(1).any { it == "unnamed" }) return null
         // if root is unnamed its named like the class
-        val testCollectionName = path.first().let { if (it == "unnamed") className else it }
+        val testCollectionName =
+            path.first().let { if (it == "unnamed") containingClass.name else it }
 
         return UniqueId(
-            "[engine:failgood]/[class:$testCollectionName($className)]/" +
+            "[engine:failgood]/[class:$testCollectionName(${containingClass.getQualifiedName()})]/" +
                 path.drop(1).joinToString("/") { "[class:$it]" },
             path.last()
         )

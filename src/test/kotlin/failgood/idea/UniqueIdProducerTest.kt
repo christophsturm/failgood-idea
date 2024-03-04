@@ -37,7 +37,7 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
     val context =
         describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
 """,
-            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
@@ -47,7 +47,7 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
     val context =
         testsFor("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
 """,
-            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
@@ -57,20 +57,21 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
     val context =
         tests { describe("level 2") { i<caret>t("test") { assert(true) } } }
 """,
-            "[engine:failgood]/[class:FailGoodTests(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:FailGoodTests(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
     fun testComputesUniqueIdForNestedTestWithMinimalWhitespace() {
         test(
             """val context = describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }""",
-            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
     fun testWorksForTestsDefinedInObject() {
         testFull(
-            """import failgood.Test
+            """package com.pkg
+import failgood.Test
 
 @Test
 object FailGoodTests {
@@ -78,7 +79,7 @@ object FailGoodTests {
         describe("level 1") { describe("level 2") { i<caret>t ("test") { assert(true) } } }
 }
 """,
-            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
@@ -106,7 +107,7 @@ object FailGoodTests {
             """
     val context = describe<Test> { describe("level 2") { i<caret>t("test") { assert(true) } } }
 """,
-            "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:Test(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
@@ -114,7 +115,8 @@ object FailGoodTests {
         // support third party describe methods as long as their first parameter is the name of the
         // context that they create
         testFull(
-            """import failgood.Test
+            """package com.pkg
+import failgood.Test
 import failgood.dsl.ContextLambda
 fun describeOther(name: String, otherParameter: String, ContextLambda: lambda) = describe(name, function = lambda)
 
@@ -122,7 +124,7 @@ fun describeOther(name: String, otherParameter: String, ContextLambda: lambda) =
 class FailGoodTests {
     val context = describeOther("Test", "blah") { describe("level 2") { i<caret>t("test") { assert(true) } } } }
 """,
-            "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:Test(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
@@ -131,7 +133,7 @@ class FailGoodTests {
             """
     val context = describe(Test::class) { describe("level 2") { i<caret>t("test") { assert(true) } } }
 """,
-            "[engine:failgood]/[class:Test(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:Test(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
@@ -142,7 +144,7 @@ class FailGoodTests {
     val rootContextValName="rootContext"
     val context = describe(rootContextValName) { describe("level 2") { i<caret>t("test") { assert(true) } } }
 """,
-            "[engine:failgood]/[class:rootContext(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:rootContext(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
@@ -152,7 +154,7 @@ class FailGoodTests {
     const val rootContextValName="rootContext"
     val context = describe(rootContextValName) { describe("level 2") { i<caret>t("test") { assert(true) } } }
 """,
-            "[engine:failgood]/[class:rootContext(FailGoodTests)]/[class:level 2]/[class:test]"
+            "[engine:failgood]/[class:rootContext(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]"
         )
     }
 
@@ -161,13 +163,15 @@ class FailGoodTests {
             """
     val context = describe("level 1") { describ<caret>e("level 2") { it("test") { assert(true) } } }
 """,
-            "[engine:failgood]/[class:level 1(FailGoodTests)]/[class:level 2]"
+            "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]"
         )
     }
 
     private fun test(@Language("kotlin") source: String, expected: String?) {
         @Language("kotlin")
-        val completeSource = """import failgood.Test
+        val completeSource =
+            """package com.pkg
+import failgood.Test
 @Test
 class FailGoodTests {
 $source
