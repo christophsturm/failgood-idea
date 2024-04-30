@@ -28,7 +28,7 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         val data = configuration.persistentData
         data.setUniqueIds(uniqueId.uniqueId)
         data.TEST_OBJECT = JUnitConfiguration.TEST_UNIQUE_ID
-        configuration.name = uniqueId.friendlyName
+        configuration.name = uniqueId.name
         log.info("creating run config for $uniqueId")
         return true
     }

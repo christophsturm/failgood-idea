@@ -131,4 +131,4 @@ fun KtClassOrObject.getQualifiedName(): String? {
     return parts.joinToString(separator = ".")
 }
 
-data class FriendlyUniqueId(val uniqueId: String, val friendlyName: String)
+data class FriendlyUniqueId(val uniqueId: String, val name: String)

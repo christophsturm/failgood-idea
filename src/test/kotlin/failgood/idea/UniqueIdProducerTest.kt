@@ -43,6 +43,7 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
             "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
             friendlyUniqueId?.uniqueId
         )
+        assertEquals("test", friendlyUniqueId?.name)
     }
 
     fun testComputesUniqueIdForNestedTest() {
