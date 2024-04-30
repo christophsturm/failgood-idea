@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 object UniqueIdProducer {
-    fun computeUniqueId(e: PsiElement): UniqueId? {
+    fun computeUniqueId(e: PsiElement): FriendlyUniqueId? {
         if (e.firstChild != null)
             return null // "line markers should only be added to leaf elements"
 
@@ -34,7 +34,7 @@ object UniqueIdProducer {
         val testCollectionName =
             path.first().let { if (it == "unnamed") containingClass.name else it }
 
-        return UniqueId(
+        return FriendlyUniqueId(
             "[engine:failgood]/[class:$testCollectionName(${containingClass.getQualifiedName()})]/" +
                 path.drop(1).joinToString("/") { "[class:$it]" },
             path.last()
@@ -131,4 +131,4 @@ fun KtClassOrObject.getQualifiedName(): String? {
     return parts.joinToString(separator = ".")
 }
 
-data class UniqueId(val uniqueId: String, val friendlyName: String)
+data class FriendlyUniqueId(val uniqueId: String, val friendlyName: String)
