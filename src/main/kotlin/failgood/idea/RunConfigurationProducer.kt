@@ -24,6 +24,10 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         context: ConfigurationContext,
         sourceElement: Ref<PsiElement>
     ): Boolean {
+        // not sure if this actually happens, but for example the gradle configuration producer
+        // checks for it, so we do too
+        if (sourceElement.isNull) return false
+
         val uniqueId = UniqueIdProducer.computeUniqueId(sourceElement.get()) ?: return false
         val data = configuration.persistentData
         data.setUniqueIds(uniqueId.uniqueId)
@@ -37,11 +41,18 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         configuration: JUnitConfiguration,
         context: ConfigurationContext
     ): Boolean {
-        // we only care about uniqueid run configs
+        // we only care about uniqueid run configs that have one single unique id
         if (configuration.testType != JUnitConfiguration.TEST_UNIQUE_ID) return false
-        val uniqueId = context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) }?.uniqueId
-        val b = uniqueId != null && configuration.persistentData.uniqueIds.single() == uniqueId
-        if (b) log.info("${configuration.name} is from us")
-        return b
+        val singleUniqueId = configuration.persistentData.uniqueIds.singleOrNull() ?: return false
+
+        val uniqueId = context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) } ?: return false
+        if (singleUniqueId == uniqueId.uniqueId) {
+            if (configuration.name == uniqueId.name) {
+                log.info("${configuration.name} is from us")
+                return true
+            }
+            log.info("${configuration.name} is not from us but has same uniqueid")
+        }
+        return false
     }
 }
