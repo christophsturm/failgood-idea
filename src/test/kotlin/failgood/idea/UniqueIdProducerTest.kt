@@ -124,6 +124,7 @@ object FailGoodTests {
             )
         assertEquals(null, friendlyUniqueId?.uniqueId)
     }
+
     fun testReturnsNullForTestBody() {
         val friendlyUniqueId =
             simpleGetUniqueId(
@@ -145,6 +146,7 @@ object FailGoodTests {
             )
         assertEquals(null, friendlyUniqueId?.uniqueId)
     }
+
     fun _testWorksForNestedTestWithGenericClassAsRootDescription() {
         val friendlyUniqueId =
             simpleGetUniqueId(

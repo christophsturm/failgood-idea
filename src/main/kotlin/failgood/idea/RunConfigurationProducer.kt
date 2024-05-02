@@ -45,7 +45,8 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         if (configuration.testType != JUnitConfiguration.TEST_UNIQUE_ID) return false
         val singleUniqueId = configuration.persistentData.uniqueIds.singleOrNull() ?: return false
 
-        val uniqueId = context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) } ?: return false
+        val uniqueId =
+            context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) } ?: return false
         if (singleUniqueId == uniqueId.uniqueId) {
             if (configuration.name == uniqueId.name) {
                 log.info("${configuration.name} is from us")
