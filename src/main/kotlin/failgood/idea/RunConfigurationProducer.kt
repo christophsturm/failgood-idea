@@ -1,6 +1,7 @@
 package failgood.idea
 
 import com.intellij.execution.actions.ConfigurationContext
+import com.intellij.execution.actions.ConfigurationFromContext
 import com.intellij.execution.actions.LazyRunConfigurationProducer
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.junit.JUnitConfiguration
@@ -55,5 +56,19 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
             log.info("${configuration.name} is not from us but has same uniqueid")
         }
         return false
+    }
+
+    override fun shouldReplace(
+        self: ConfigurationFromContext,
+        other: ConfigurationFromContext
+    ): Boolean {
+        // our config should replace the other config if the other config is not a Junit
+        // Configuration (not sure if we are even called then)
+        // and if the other config is not for a unique id. (because that means that the other config
+        // is probably more braod and ours is more specific)
+
+        //        val c = self.configuration as? JUnitConfiguration ?: return false
+        val o = other.configuration as? JUnitConfiguration ?: return true
+        return o.testType != JUnitConfiguration.TEST_UNIQUE_ID
     }
 }
