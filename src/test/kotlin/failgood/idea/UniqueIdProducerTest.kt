@@ -124,7 +124,27 @@ object FailGoodTests {
             )
         assertEquals(null, friendlyUniqueId?.uniqueId)
     }
+    fun testReturnsNullForTestBody() {
+        val friendlyUniqueId =
+            simpleGetUniqueId(
+                """
+    val context =
+        describe("level 1") { describe("level 2") { it("test") { <caret>assert(true) } } }
+"""
+            )
+        assertEquals(null, friendlyUniqueId?.uniqueId)
+    }
 
+    fun testReturnsNullForCallInsideTestBody() {
+        val friendlyUniqueId =
+            simpleGetUniqueId(
+                """
+    val context =
+        describe("level 1") { describe("level 2") { it("test") { as<caret>sert(true) } } }
+"""
+            )
+        assertEquals(null, friendlyUniqueId?.uniqueId)
+    }
     fun _testWorksForNestedTestWithGenericClassAsRootDescription() {
         val friendlyUniqueId =
             simpleGetUniqueId(
