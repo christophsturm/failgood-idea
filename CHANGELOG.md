@@ -6,6 +6,7 @@
 
 - Support IDEA 2023.1 and 2023.4 EAP
 - Support failgood 0.9
+- Warn about incompatible Gradle settings
 
 ## [0.0.3]
 
