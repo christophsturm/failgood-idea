@@ -19,6 +19,9 @@
     <extensions defaultExtensionNs="com.intellij">
         <runLineMarkerContributor language="kotlin" implementationClass="failgood.idea.RunTestLineMarkerContributor"/>
         <runConfigurationProducer implementation="failgood.idea.RunConfigurationProducer"/>
+        <notificationGroup id="failgood" displayType="STICKY_BALLOON"/>
+        <postStartupActivity implementation="failgood.idea.StartupActivity"/>
+
     </extensions>
 
 </idea-plugin>
