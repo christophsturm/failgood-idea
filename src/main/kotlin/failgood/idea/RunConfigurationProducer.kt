@@ -63,9 +63,9 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         other: ConfigurationFromContext
     ): Boolean {
         // our config should replace the other config if the other config is not a Junit
-        // Configuration (not sure if we are even called then)
-        // and if the other config is not for a unique id. (because that means that the other config
-        // is probably more braod and ours is more specific)
+        // Configuration and if the other config is not for a unique id.
+        // (because that means that the other config is probably more broad and ours is more
+        // specific)
 
         //        val c = self.configuration as? JUnitConfiguration ?: return false
         val o = other.configuration as? JUnitConfiguration ?: return true
