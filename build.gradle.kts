@@ -63,13 +63,6 @@ changelog {
     repositoryUrl.set(properties("pluginRepositoryUrl"))
 }
 
-// Configure Gradle Qodana Plugin - read more: https://github.com/JetBrains/gradle-qodana-plugin
-qodana {
-    cachePath = projectDir.resolve(".qodana").canonicalPath
-    reportPath = projectDir.resolve("build/reports/inspections").canonicalPath
-    saveReport = true
-    showReport = environment("QODANA_SHOW_REPORT").map { it.toBoolean() }.getOrElse(false)
-}
 
 koverReport { defaults { xml { onCheck = true } } }
 
