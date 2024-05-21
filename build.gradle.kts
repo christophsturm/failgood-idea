@@ -35,7 +35,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(enforcedPlatform("org.jetbrains.kotlin:kotlin-bom:1.9.24"))
+    implementation(enforcedPlatform("org.jetbrains.kotlin:kotlin-bom:2.0.0"))
     testRuntimeOnly(libs.junitJupiterEngine)
     testRuntimeOnly(libs.junitVintageEngine)
     testImplementation(libs.junitVintageEngine)
