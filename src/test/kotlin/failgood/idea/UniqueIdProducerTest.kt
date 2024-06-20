@@ -245,8 +245,7 @@ class FailGoodTests {
     class FailGoodTests {
     $source
     }"""
-        val friendlyUniqueId = getUniqueId(completeSource)
-        return friendlyUniqueId
+        return getUniqueId(completeSource)
     }
 
     private fun getUniqueId(source: String): FriendlyUniqueId? {
@@ -255,8 +254,7 @@ class FailGoodTests {
         assertInstanceOf(psiFile, KtFile::class.java)
         assertFalse(PsiErrorElementUtil.hasErrors(project, psiFile.virtualFile))
         val element = psiFile.findElementAt(myFixture.caretOffset)!!
-        val friendlyUniqueId = UniqueIdProducer.computeUniqueId(element)
-        return friendlyUniqueId
+        return UniqueIdProducer.computeUniqueId(element)
     }
 
     override fun getTestDataPath(): String = File("src/test/testData/").absolutePath
