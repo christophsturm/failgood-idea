@@ -270,12 +270,7 @@ class FailGoodTests {
             RepositoryLibraryProperties(mavenCoordinates, includeTransitiveDependencies)
         val roots =
             JarRepositoryManager.loadDependenciesModal(
-                model.project,
-                libraryProperties,
-                false,
-                false,
-                null,
-                remoteRepositoryDescriptions
+                model.project, libraryProperties, false, false, null, remoteRepositoryDescriptions
             )
         val tableModel = model.moduleLibraryTable.modifiableModel
         val library = tableModel.createLibrary(mavenCoordinates)
@@ -286,9 +281,7 @@ class FailGoodTests {
         }
         val libraryOrderEntry =
             model.findLibraryOrderEntry(library)
-                ?: throw IllegalStateException(
-                    "Unable to find registered library $mavenCoordinates"
-                )
+                ?: throw IllegalStateException("Unable to find registered library $mavenCoordinates")
         libraryOrderEntry.scope = dependencyScope!!
         libraryModel.commit()
         tableModel.commit()

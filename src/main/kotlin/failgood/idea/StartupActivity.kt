@@ -47,8 +47,7 @@ private fun showNotification(project: Project) {
             notification.expire()
             ShowSettingsUtil.getInstance()
                 .showSettingsDialog(project, GradleConstants.SYSTEM_ID.readableName)
-        }
-    )
+        })
 
     Notifications.Bus.notify(notification, project)
 }

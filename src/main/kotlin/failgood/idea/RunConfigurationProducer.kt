@@ -17,7 +17,7 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         JUnitConfigurationType.getInstance().configurationFactories.singleOrNull()
             ?: throw FailgoodPluginException(
                 "JUnitConfigurationType.getInstance().configurationFactories is supposed to have only one entry but has:" +
-                    JUnitConfigurationType.getInstance().configurationFactories.joinToString()
+                        JUnitConfigurationType.getInstance().configurationFactories.joinToString()
             )
 
     override fun setupConfigurationFromContext(
@@ -46,8 +46,7 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         if (configuration.testType != JUnitConfiguration.TEST_UNIQUE_ID) return false
         val singleUniqueId = configuration.persistentData.uniqueIds.singleOrNull() ?: return false
 
-        val uniqueId =
-            context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) } ?: return false
+        val uniqueId = context.psiLocation?.let { UniqueIdProducer.computeUniqueId(it) } ?: return false
         if (singleUniqueId == uniqueId.uniqueId) {
             if (configuration.name == uniqueId.name) {
                 log.info("${configuration.name} is from us")

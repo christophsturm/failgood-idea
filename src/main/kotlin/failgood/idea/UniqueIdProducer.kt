@@ -15,8 +15,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 object UniqueIdProducer {
     fun computeUniqueId(e: PsiElement): FriendlyUniqueId? {
-        if (e.firstChild != null)
-            return null // "line markers should only be added to leaf elements"
+        if (e.firstChild != null) return null // "line markers should only be added to leaf elements"
 
         // show the run marker only on the identifier of the call
         // (for example the "it" or "describe") to avoid duplicate markers
@@ -31,12 +30,11 @@ object UniqueIdProducer {
         // only root may be unnamed
         if (path.drop(1).any { it == "unnamed" }) return null
         // if root is unnamed its named like the class
-        val testCollectionName =
-            path.first().let { if (it == "unnamed") containingClass.name else it }
+        val testCollectionName = path.first().let { if (it == "unnamed") containingClass.name else it }
 
         return FriendlyUniqueId(
             "[engine:failgood]/[class:$testCollectionName(${containingClass.getQualifiedName()})]/" +
-                path.drop(1).joinToString("/") { "[class:$it]" },
+                    path.drop(1).joinToString("/") { "[class:$it]" },
             path.last()
         )
     }
@@ -60,14 +58,13 @@ object UniqueIdProducer {
         val calleeName = getCalleeName(declaration) ?: return null
         if (!runnableNodeNames.contains(calleeName)) return null
         return buildList {
-                add(getContextOrTestName(declaration) ?: return null)
-                var nextDeclaration = declaration
-                while (true) {
-                    nextDeclaration =
-                        nextDeclaration.getStrictParentOfType<KtCallElement>() ?: break
-                    add(getContextOrTestName(nextDeclaration) ?: return null)
-                }
+            add(getContextOrTestName(declaration) ?: return null)
+            var nextDeclaration = declaration
+            while (true) {
+                nextDeclaration = nextDeclaration.getStrictParentOfType<KtCallElement>() ?: break
+                add(getContextOrTestName(nextDeclaration) ?: return null)
             }
+        }
             .reversed()
     }
 
@@ -78,10 +75,8 @@ object UniqueIdProducer {
 
     /** get the string value of the first argument (must be a string or a class) */
     private fun getContextOrTestName(declaration: KtCallElement): String? =
-        when (
-            val firstParameter =
-                declaration.valueArgumentList?.children?.firstOrNull()?.children?.singleOrNull()
-        ) {
+        when (val firstParameter =
+            declaration.valueArgumentList?.children?.firstOrNull()?.children?.singleOrNull()) {
             is KtStringTemplateExpression -> firstParameter.asString()
             is KtClassLiteralExpression -> firstParameter.receiverExpression?.text
             is KtSimpleNameExpression -> {
@@ -92,9 +87,11 @@ object UniqueIdProducer {
                 val initializer = valDeclaration?.initializer as? KtStringTemplateExpression
                 initializer?.asString()
             }
+
             null -> {
                 if (getCalleeName(declaration) == "tests") "unnamed" else null
             }
+
             else -> null
         }
 
