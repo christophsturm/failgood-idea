@@ -160,3 +160,4 @@ val runIdeForUiTests by intellijPlatformTesting.runIde.registering {
         robotServerPlugin(Constraints.LATEST_VERSION)
     }
 }
+ktfmt { kotlinLangStyle() }
