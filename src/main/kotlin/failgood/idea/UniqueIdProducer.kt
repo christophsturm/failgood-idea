@@ -101,6 +101,7 @@ object UniqueIdProducer {
     private fun KtStringTemplateExpression.asString() =
         entries.joinToString("") { it.text.replace("\\\"", "\"") }
 }
+
 /** checks if a class is a failgood test class (has a @Test Annotation) */
 private fun KtClassOrObject.isTestClass(): Boolean {
     val annotationEntries = this.modifierList?.annotationEntries
