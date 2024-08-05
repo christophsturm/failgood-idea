@@ -8,13 +8,12 @@ import com.intellij.psi.PsiElement
 // private val log = logger<RunTestLineMarkerContributor>()
 
 class RunTestLineMarkerContributor : RunLineMarkerContributor() {
-    override fun getInfo(e: PsiElement): Info? {
-        val uniqueId = UniqueIdProducer.computeUniqueId(e) ?: return null
-        //        log.warn("returning $uniqueId for ${e.text}")
-        return Info(
-            AllIcons.RunConfigurations.TestState.Run,
-            { "run ${uniqueId.name}" },
-            *ExecutorAction.getActions(1)
-        )
-    }
+  override fun getInfo(e: PsiElement): Info? {
+    val uniqueId = UniqueIdProducer.computeUniqueId(e) ?: return null
+    //        log.warn("returning $uniqueId for ${e.text}")
+    return Info(
+        AllIcons.RunConfigurations.TestState.Run,
+        { "run ${uniqueId.name}" },
+        *ExecutorAction.getActions(1))
+  }
 }
