@@ -14,7 +14,7 @@ plugins {
 
     id("com.adarshr.test-logger") version "4.0.0"
     id("com.bnorm.power.kotlin-power-assert") version "0.13.0"
-    id("com.ncorti.ktfmt.gradle") version "0.18.0"
+    id("com.ncorti.ktfmt.gradle") version "0.20.1"
 }
 
 group = providers.gradleProperty("pluginGroup").get()
