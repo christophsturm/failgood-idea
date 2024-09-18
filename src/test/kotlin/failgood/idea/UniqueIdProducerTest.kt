@@ -37,12 +37,10 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
                 """
     val context =
         describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
         assertEquals("test", friendlyUniqueId?.name)
     }
 
@@ -52,12 +50,10 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
                 """
     val context =
         testsFor("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     fun testComputesUniqueIdForNestedTestInUnnamedTestCollection() {
@@ -66,23 +62,19 @@ class UniqueIdProducerTest : LightJavaCodeInsightFixtureTestCase() {
                 """
     val context =
         tests { describe("level 2") { i<caret>t("test") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:FailGoodTests(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     fun testComputesUniqueIdForNestedTestWithMinimalWhitespace() {
         val friendlyUniqueId =
             simpleGetUniqueId(
-                """val context = describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }"""
-            )
+                """val context = describe("level 1") { describe("level 2") { i<caret>t("test") { assert(true) } } }""")
         assertEquals(
             "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     fun testWorksForTestsDefinedInObject() {
@@ -96,12 +88,10 @@ object FailGoodTests {
     val context =
         describe("level 1") { describe("level 2") { i<caret>t ("test") { assert(true) } } }
 }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     fun testReturnsNullForOpenBracket() {
@@ -109,8 +99,7 @@ object FailGoodTests {
         val friendlyUniqueId =
             simpleGetUniqueId(
                 """val context = describe("level 1") { describe("level 2") { it<caret>("test") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(null, friendlyUniqueId?.uniqueId)
     }
 
@@ -120,8 +109,7 @@ object FailGoodTests {
                 """
     val context =
         describe("level 1") { describe("level 2") { it("t<caret>est") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(null, friendlyUniqueId?.uniqueId)
     }
 
@@ -131,8 +119,7 @@ object FailGoodTests {
                 """
     val context =
         describe("level 1") { describe("level 2") { it("test") { <caret>assert(true) } } }
-"""
-            )
+""")
         assertEquals(null, friendlyUniqueId?.uniqueId)
     }
 
@@ -142,8 +129,7 @@ object FailGoodTests {
                 """
     val context =
         describe("level 1") { describe("level 2") { it("test") { as<caret>sert(true) } } }
-"""
-            )
+""")
         assertEquals(null, friendlyUniqueId?.uniqueId)
     }
 
@@ -152,12 +138,10 @@ object FailGoodTests {
             simpleGetUniqueId(
                 """
     val context = describe<Test> { describe("level 2") { i<caret>t("test") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:Test(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     fun testWorksForThirdPartyDescribe() {
@@ -173,12 +157,10 @@ fun describeOther(name: String, otherParameter: String, ContextLambda: lambda) =
 @Test
 class FailGoodTests {
     val context = describeOther("Test", "blah") { describe("level 2") { i<caret>t("test") { assert(true) } } } }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:Test(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     fun testWorksForClassAsRootDescription() {
@@ -186,12 +168,10 @@ class FailGoodTests {
             simpleGetUniqueId(
                 """
     val context = describe(Test::class) { describe("level 2") { i<caret>t("test") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:Test(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     fun testComputesUniqueIdForNestedTestWithAsRootDescriptionDefinedInAVal() {
@@ -201,12 +181,10 @@ class FailGoodTests {
     @Suppress("MayBeConstant")
     val rootContextValName="rootContext"
     val context = describe(rootContextValName) { describe("level 2") { i<caret>t("test") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:rootContext(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     fun testComputesUniqueIdForNestedTestWithAsRootDescriptionDefinedInAConstVal() {
@@ -215,12 +193,10 @@ class FailGoodTests {
                 """
     const val rootContextValName="rootContext"
     val context = describe(rootContextValName) { describe("level 2") { i<caret>t("test") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:rootContext(com.pkg.FailGoodTests)]/[class:level 2]/[class:test]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     fun testComputesUniqueIdForContext() {
@@ -228,12 +204,10 @@ class FailGoodTests {
             simpleGetUniqueId(
                 """
     val context = describe("level 1") { describ<caret>e("level 2") { it("test") { assert(true) } } }
-"""
-            )
+""")
         assertEquals(
             "[engine:failgood]/[class:level 1(com.pkg.FailGoodTests)]/[class:level 2]",
-            friendlyUniqueId?.uniqueId
-        )
+            friendlyUniqueId?.uniqueId)
     }
 
     private fun simpleGetUniqueId(source: String): FriendlyUniqueId? {
@@ -270,13 +244,7 @@ class FailGoodTests {
             RepositoryLibraryProperties(mavenCoordinates, includeTransitiveDependencies)
         val roots =
             JarRepositoryManager.loadDependenciesModal(
-                model.project,
-                libraryProperties,
-                false,
-                false,
-                null,
-                remoteRepositoryDescriptions
-            )
+                model.project, libraryProperties, false, false, null, remoteRepositoryDescriptions)
         val tableModel = model.moduleLibraryTable.modifiableModel
         val library = tableModel.createLibrary(mavenCoordinates)
         val libraryModel = library.modifiableModel
@@ -287,8 +255,7 @@ class FailGoodTests {
         val libraryOrderEntry =
             model.findLibraryOrderEntry(library)
                 ?: throw IllegalStateException(
-                    "Unable to find registered library $mavenCoordinates"
-                )
+                    "Unable to find registered library $mavenCoordinates")
         libraryOrderEntry.scope = dependencyScope!!
         libraryModel.commit()
         tableModel.commit()

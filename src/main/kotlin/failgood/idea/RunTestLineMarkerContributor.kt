@@ -14,7 +14,6 @@ class RunTestLineMarkerContributor : RunLineMarkerContributor() {
         return Info(
             AllIcons.RunConfigurations.TestState.Run,
             { "run ${uniqueId.name}" },
-            *ExecutorAction.getActions(1)
-        )
+            *ExecutorAction.getActions(1))
     }
 }

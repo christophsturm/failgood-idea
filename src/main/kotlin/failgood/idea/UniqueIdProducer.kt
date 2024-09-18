@@ -37,8 +37,7 @@ object UniqueIdProducer {
         return FriendlyUniqueId(
             "[engine:failgood]/[class:$testCollectionName(${containingClass.getQualifiedName()})]/" +
                 path.drop(1).joinToString("/") { "[class:$it]" },
-            path.last()
-        )
+            path.last())
     }
 
     // return a ktCallElement if it is the parent or grandparent of the psiElement
@@ -78,10 +77,8 @@ object UniqueIdProducer {
 
     /** get the string value of the first argument (must be a string or a class) */
     private fun getContextOrTestName(declaration: KtCallElement): String? =
-        when (
-            val firstParameter =
-                declaration.valueArgumentList?.children?.firstOrNull()?.children?.singleOrNull()
-        ) {
+        when (val firstParameter =
+            declaration.valueArgumentList?.children?.firstOrNull()?.children?.singleOrNull()) {
             is KtStringTemplateExpression -> firstParameter.asString()
             is KtClassLiteralExpression -> firstParameter.receiverExpression?.text
             is KtSimpleNameExpression -> {

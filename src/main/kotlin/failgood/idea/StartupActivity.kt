@@ -39,16 +39,14 @@ private fun showNotification(project: Project) {
             "failgood",
             "Failgood is incompatible with your Gradle settings",
             "Please set \"Run Tests Using\" to \"IntelliJ IDEA\"",
-            NotificationType.ERROR
-        )
+            NotificationType.ERROR)
 
     notification.addAction(
         NotificationAction.createSimple("Open Gradle settings") {
             notification.expire()
             ShowSettingsUtil.getInstance()
                 .showSettingsDialog(project, GradleConstants.SYSTEM_ID.readableName)
-        }
-    )
+        })
 
     Notifications.Bus.notify(notification, project)
 }

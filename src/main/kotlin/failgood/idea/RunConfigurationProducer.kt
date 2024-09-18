@@ -17,8 +17,7 @@ internal class RunConfigurationProducer : LazyRunConfigurationProducer<JUnitConf
         JUnitConfigurationType.getInstance().configurationFactories.singleOrNull()
             ?: throw FailgoodPluginException(
                 "JUnitConfigurationType.getInstance().configurationFactories is supposed to have only one entry but has:" +
-                    JUnitConfigurationType.getInstance().configurationFactories.joinToString()
-            )
+                    JUnitConfigurationType.getInstance().configurationFactories.joinToString())
 
     override fun setupConfigurationFromContext(
         configuration: JUnitConfiguration,
