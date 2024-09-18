@@ -22,7 +22,5 @@
         <runConfigurationProducer implementation="failgood.idea.RunConfigurationProducer"/>
         <notificationGroup id="failgood" displayType="TOOL_WINDOW"/>
         <postStartupActivity implementation="failgood.idea.StartupActivity"/>
-
     </extensions>
-
 </idea-plugin>
